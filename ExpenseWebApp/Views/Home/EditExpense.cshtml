@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Edit";
+}
+
+@model ExpenseWebAppDAL.Entities.Expense
+
+<div class="text-center">
+    <h1 class="display-4">Edit an Expense</h1>
+</div>
+
+<script src="~/js/Submit.js" defer></script>
+
+<!-- EDIT HTTPPUT -->
+<form asp-controller="Home">
+    <input type="hidden" id="ExpenseId" name="Id" value="@Model?.Id" />
+
+    <label class="mt-4">Value</label>
+    <input class="form-control" type="number" id="ExpenseValue" name="Value" placeholder="0" step="0.01" value="@Model?.Value" />
+
+    <label class="mt-4">Description</label>
+    <input class="form-control" type="text" id="ExpenseDescription" name="Description" placeholder="Enter description" value="@Model?.Description" />
+
+    <button class="btn btn-primary mt-4" type="button" onclick="updateExpense()">Ok</button>
+</form>
+
