@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace ExpenseWebAppDAL.Interfaces
 {
-    public interface IRepository<T> where T : class
+    public interface IRepository<TEntity> where TEntity : class
     {
-        Task<IEnumerable<T>> GetAllAsync();
-        Task<T?> GetByIdAsync(int id);
-        Task AddAsync(T entityToAdd);
-        Task UpdateAsync(T entityToUpdate);
+        Task<IEnumerable<TEntity>> GetAllAsync();
+        Task<TEntity?> GetByIdAsync(int id);
+        Task AddAsync(TEntity entityToAdd);
+        Task UpdateAsync(TEntity entityToUpdate);
         Task DeleteAsync(int id);
     }
 }
