@@ -12,10 +12,11 @@ namespace ExpenseWebAppDAL.Entities
     {
         [Key]
         public int Id { get; set; }
+        [Required(ErrorMessage = "Must have a name")]
         public string Name { get; set; } = null!;
-
-        public int ExpenseId { get; set; }
-        [ForeignKey("ExpenseId")]
-        public Expense Expense { get; set; } = null!;
+        
+        [NotMapped]
+        public int[]? ExpensesIds {  get; set; }
+        public List<Expense>? Expenses { get; set; }
     }
 }

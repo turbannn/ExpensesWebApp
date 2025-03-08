@@ -4,6 +4,7 @@ using ExpenseWebAppDAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExpenseWebAppDAL.Migrations
 {
     [DbContext(typeof(WebAppContext))]
-    partial class WebAppContextModelSnapshot : ModelSnapshot
+    [Migration("20250308195144_Second")]
+    partial class Second
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace ExpenseWebAppDAL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
-
-            modelBuilder.Entity("CategoryExpense", b =>
-                {
-                    b.Property<int>("CategoriesListId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ExpensesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CategoriesListId", "ExpensesId");
-
-                    b.HasIndex("ExpensesId");
-
-                    b.ToTable("CategoryExpense");
-                });
 
             modelBuilder.Entity("ExpenseWebAppDAL.Entities.Category", b =>
                 {
@@ -45,11 +33,16 @@ namespace ExpenseWebAppDAL.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("ExpenseId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ExpenseId");
 
                     b.ToTable("Categories");
                 });
@@ -77,19 +70,18 @@ namespace ExpenseWebAppDAL.Migrations
                     b.ToTable("Expenses");
                 });
 
-            modelBuilder.Entity("CategoryExpense", b =>
+            modelBuilder.Entity("ExpenseWebAppDAL.Entities.Category", b =>
                 {
-                    b.HasOne("ExpenseWebAppDAL.Entities.Category", null)
-                        .WithMany()
-                        .HasForeignKey("CategoriesListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("ExpenseWebAppDAL.Entities.Expense", "Expense")
+                        .WithMany("Categories")
+                        .HasForeignKey("ExpenseId");
 
-                    b.HasOne("ExpenseWebAppDAL.Entities.Expense", null)
-                        .WithMany()
-                        .HasForeignKey("ExpensesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Expense");
+                });
+
+            modelBuilder.Entity("ExpenseWebAppDAL.Entities.Expense", b =>
+                {
+                    b.Navigation("Categories");
                 });
 #pragma warning restore 612, 618
         }

@@ -29,6 +29,9 @@
                     Creation Date
                 </th>
                 <th>
+                    Categories
+                </th>
+                <th>
                     Actions
                 </th>
 
@@ -52,9 +55,11 @@
                             @e.CreationDate
                         </td>
                         <td>
+                            @e.Categories
+                        </td>
+                        <td>
                             <a asp-controller="Home" asp-action="ExpenseRedirection" asp-route-id="@e.Id">Edit</a>
                             <button asp-controller="Home" type="button" class="btn btn-light" onclick="deleteExpense(@e.Id)">Delete</button>
-
                         </td>
                     </tr>
                 }
