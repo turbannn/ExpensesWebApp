@@ -8,19 +8,14 @@ using System.Threading.Tasks;
 
 namespace ExpenseWebAppDAL.Entities
 {
-    public class Expense
+    public class Category
     {
         [Key]
         public int Id { get; set; }
+        public string Name { get; set; } = null!;
 
-        [Required(ErrorMessage = "Value must not be empty")]
-        public double Value { get; set; }
-
-        [Required(ErrorMessage ="Description must not be empty")]
-        public string? Description { get; set; }
-        public DateTime? CreationDate { get; set; }
-
+        public int ExpenseId { get; set; }
         [ForeignKey("ExpenseId")]
-        public List<Category>? Category { get; set; }
+        public Expense Expense { get; set; } = null!;
     }
 }

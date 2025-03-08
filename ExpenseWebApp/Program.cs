@@ -24,7 +24,9 @@ namespace ExpenseWebApp
             builder.Services.AddDbContext<WebAppContext>(opt => opt.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 29))));
 
             builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             builder.Services.AddScoped<ExpenseService>();
+            builder.Services.AddScoped<CategoryService>();
 
             var app = builder.Build();
 

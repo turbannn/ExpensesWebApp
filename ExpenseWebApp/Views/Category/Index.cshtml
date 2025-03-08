@@ -1,16 +1,19 @@
-﻿@{
-    ViewData["Title"] = "Expenses";
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Categories";
 }
 
-@model List<ExpenseWebAppDAL.Entities.Expense>
+@model List<ExpenseWebAppDAL.Entities.Category>
 
-<script src="~/js/ExpensesFrontend.js"></script>
+<script src="~/js/CategoriesFrontend.js"></script>
 
 <div class="text-center">
-    <h1 class="display-4">Expenses</h1>
+    <h1 class="display-4">Categories</h1>
     <br />
     <hr />
-    <h3>Total Expenses: $@ViewBag.Expenses</h3>
+    <a class="btn btn-secondary" asp-action="CreateCategory" asp-controller="Category" >Create new</a>
     <br />
 
     <table class="table">
@@ -20,13 +23,7 @@
                     Id
                 </th>
                 <th>
-                    Value
-                </th>
-                <th>
-                    Description
-                </th>
-                <th>
-                    Creation Date
+                    Name
                 </th>
                 <th>
                     Actions
@@ -43,18 +40,11 @@
                             @e.Id
                         </td>
                         <td>
-                            @e.Value
-                        </td>
-                        <td>
-                            @e.Description
-                        </td>
-                        <td>
-                            @e.CreationDate
+                            @e.Name
                         </td>
                         <td>
                             <a asp-controller="Home" asp-action="ExpenseRedirection" asp-route-id="@e.Id">Edit</a>
                             <button asp-controller="Home" type="button" class="btn btn-light" onclick="deleteExpense(@e.Id)">Delete</button>
-
                         </td>
                     </tr>
                 }
