@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "CreateCategory";
+}
+
+@model ExpenseWebAppDAL.Entities.Category
+
+<div class="text-center">
+    <h1 class="display-4">Create an Expense</h1>
+</div>
+
+<script src="~/js/CategoriesFrontend.js" defer></script>
+
+<!-- Check for id to route the data!!! -->
+<form asp-controller="Category">
+    <input type="hidden" id="CategoryId" name="Id" value="@Model?.Id" />
+
+    <label class="mt-4">Name</label>
+    <input class="form-control" type="text" id="CategoryName" name="CN" placeholder="Enter name" value="@Model?.Name" />
+
+    <button class="btn btn-primary mt-4" type="button" onclick="createCategory()">Ok</button>
+</form>

@@ -16,18 +16,18 @@ namespace ExpenseWebAppBLL.Services
         {
             _categoryRepository = repository;
         }
-        public async Task<IEnumerable<Category>> GetAllExpensesAsync()
+        public async Task<IEnumerable<Category>?> GetAllCategoriesAsync()
         {
             return await _categoryRepository.GetAllAsync();
         }
-        public async Task<Category?> GetExpenseByIdAsync(int id)
+        public async Task<Category?> GetCategoryByIdAsync(int id)
         {
             if (id < 0) return null;
 
             return await _categoryRepository.GetByIdAsync(id);
         }
 
-        public async Task<bool> AddExpenseAsync(Category category)
+        public async Task<bool> AddCategoryAsync(Category category)
         {
             if (category.Id < 0)
                 return false;
@@ -36,7 +36,7 @@ namespace ExpenseWebAppBLL.Services
             return true;
         }
 
-        public async Task<bool> UpdateExpenseAsync(Category category)
+        public async Task<bool> UpdateCategoryAsync(Category category)
         {
 
             if (category.Id < 0)
@@ -46,7 +46,7 @@ namespace ExpenseWebAppBLL.Services
             return true;
         }
 
-        public async Task<bool> DeleteExpenseAsync(int id)
+        public async Task<bool> DeleteCategoryAsync(int id)
         {
 
             if (id < 0) return false;

@@ -9,11 +9,12 @@
 
 <script src="~/js/CategoriesFrontend.js"></script>
 
+
 <div class="text-center">
     <h1 class="display-4">Categories</h1>
     <br />
     <hr />
-    <a class="btn btn-secondary" asp-action="CreateCategory" asp-controller="Category" >Create new</a>
+    <a class="btn btn-secondary" onclick="RedirectToCategoryCreation()" >Create new</a>
     <br />
 
     <table class="table">
@@ -28,7 +29,6 @@
                 <th>
                     Actions
                 </th>
-
             </tr>
         </thead>
         <tbody>
@@ -43,8 +43,8 @@
                             @e.Name
                         </td>
                         <td>
-                            <a asp-controller="Home" asp-action="ExpenseRedirection" asp-route-id="@e.Id">Edit</a>
-                            <button asp-controller="Home" type="button" class="btn btn-light" onclick="deleteExpense(@e.Id)">Delete</button>
+                            <button type="button" class="btn btn-light" onclick="RedirectToCategoryEditing(@e.Id)">Edit</button>
+                            <button type="button" class="btn btn-light" onclick="deleteCategory(@e.Id)">Delete</button>
                         </td>
                     </tr>
                 }

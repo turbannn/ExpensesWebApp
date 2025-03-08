@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebAppTest.Controllers;
 using ExpenseWebAppDAL.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseWebApp.Controllers
 {
@@ -10,78 +11,55 @@ namespace ExpenseWebApp.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly CategoryService _categoryService;
-        //private readonly List<Category> categories; - test
 
         public CategoryController(ILogger<HomeController> logger, CategoryService categoryService)
         {
             _logger = logger;
             _categoryService = categoryService;
-            //categories = [new Category() { Id = 1, Name="asdrf" }]; - test
         }
 
         public IActionResult Index()
         {
-            return View(); //categories - test
+            var categories = _categoryService.GetAllCategoriesAsync().Result;
+            return View(categories);
         }
 
-        // GET: CategoryController/Details/5
-        public IActionResult Details(int id)
+        [HttpPost("/Category/CreateCategory")]
+        public async Task<IActionResult> CreateCategory([FromBody] Category category)
+        {
+            await _categoryService.AddCategoryAsync(category);
+            return Json(new { success = true, redirectUrl = Url.Action("Index") });
+        }
+
+        public IActionResult CreateCategory()
         {
             return View();
         }
 
-        // GET: CategoryController/Create
-        public ActionResult Create()
+        [HttpPut("/Category/EditCategory/{id}")]
+        public async Task<IActionResult> EditCategory([FromBody] Category category)
         {
-            return View();
+            await _categoryService.UpdateCategoryAsync(category);
+            return Json(new { success = true, redirectUrl = Url.Action("Index") });
         }
 
-        // POST: CategoryController/Create
-        [HttpPost]
-        public IActionResult Create(IFormCollection collection)
+        [Route("/Category/EditCategory/{id}")]
+        public async Task<IActionResult> EditCategory(int id)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            var category = await _categoryService.GetCategoryByIdAsync(id);
+
+            if (category == null) return NotFound();
+
+            return View(category);
         }
 
-        // POST: CategoryController/Edit/5
-        [HttpPost]
-        public IActionResult Edit(int id)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: CategoryController/Delete/5
+        [HttpDelete("/Category/DeleteCategory/{id}")]
         public IActionResult Delete(int id)
         {
-            return View();
-        }
+            if (!_categoryService.DeleteCategoryAsync(id).Result)
+                return BadRequest("Invalid data");
 
-        // POST: CategoryController/Delete/5
-        [HttpPost]
-        public IActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return Json(new { success = true, redirectUrl = Url.Action("Index") });
         }
     }
 }

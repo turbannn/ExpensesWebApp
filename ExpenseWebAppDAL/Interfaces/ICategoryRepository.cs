@@ -9,7 +9,7 @@ namespace ExpenseWebAppDAL.Interfaces
 {
     public interface ICategoryRepository
     {
-        Task<IEnumerable<Category>> GetAllAsync();
+        Task<IEnumerable<Category>?> GetAllAsync();
         Task<Category?> GetByIdAsync(int id);
         Task AddAsync(Category entityToAdd);
         Task UpdateAsync(Category entityToUpdate);
