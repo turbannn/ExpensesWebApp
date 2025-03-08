@@ -26,8 +26,12 @@
                     Description
                 </th>
                 <th>
+                    Creation Date
+                </th>
+                <th>
                     Actions
                 </th>
+
             </tr>
         </thead>
         <tbody>
@@ -43,6 +47,9 @@
                         </td>
                         <td>
                             @e.Description
+                        </td>
+                        <td>
+                            @e.CreationDate
                         </td>
                         <td>
                             <a asp-controller="Home" asp-action="ExpenseRedirection" asp-route-id="@e.Id">Edit</a>

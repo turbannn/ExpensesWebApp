@@ -1,49 +1,49 @@
-﻿function submitExpense() {
-    console.log("Функция submitExpense вызвана");
+﻿async function submitExpense() {
+    console.log("Function submitExpense executed");
 
-    const id = parseInt($("#ExpenseId").val()) || 0;
-    const value = parseFloat($("#ExpenseValue").val()) || 0;
-    const description = $("#ExpenseDescription").val().trim();
+    const id = parseInt(document.getElementById("ExpenseId").value) || 0;
+    const value = parseFloat(document.getElementById("ExpenseValue").value) || 0;
+    const description = document.getElementById("ExpenseDescription").value.trim();
 
     if (!description) {
-        alert("Ошибка: описание не может быть пустым!");
+        alert("Error: Description cant be empty");
         return;
     }
 
     const expense = { Id: id, Value: value, Description: description };
 
-    console.log("Отправка данных:", expense);
+    console.log("Sending data:", expense);
 
-    $.ajax({
-        url: "/Home/CreateExpenseView",
-        type: "POST",
-        contentType: "application/json",
-        data: JSON.stringify(expense),
-        success: function (result) {
-            console.log("Ответ сервера:", result);
+    try {
+        const response = await fetch("/Home/CreateExpenseView", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(expense)
+        });
 
-            if (result.success) {
-                window.location.href = result.redirectUrl;
-            } else {
-                alert("Ошибка при сохранении: " + (result.message || "Неизвестная ошибка"));
-            }
-        },
-        error: function (xhr, status, error) {
-            console.error("Ошибка при отправке запроса:", error);
-            alert("Ошибка при отправке данных!");
+        const result = await response.json();
+        console.log("Server response:", result);
+
+        if (result.success) {
+            window.location.href = result.redirectUrl;
+        } else {
+            alert("Save err: " + (result.message || "Unknown issue"));
         }
-    });
+    } catch (error) {
+        console.error("Request sending error:", error);
+        alert("Data sending error");
+    }
 }
 
-function updateExpense() {
-    console.log("Функция updateExpense вызвана");
+async function updateExpense() {
+    console.log("Function updateExpense executed");
 
-    let id = $("#ExpenseId").val();
-    let value = $("#ExpenseValue").val();
-    let description = $("#ExpenseDescription").val();
+    let id = document.getElementById("ExpenseId").value;
+    let value = document.getElementById("ExpenseValue").value;
+    let description = document.getElementById("ExpenseDescription").value;
 
     if (!id || !value || !description) {
-        alert("Ошибка: заполните все поля!");
+        alert("Error: fill all fields");
         return;
     }
 
@@ -53,68 +53,69 @@ function updateExpense() {
         Description: description.trim()
     };
 
-    console.log("Отправка данных на сервер:", expense);
+    console.log("Sending data to server:", expense);
 
-    $.ajax({
-        url: "/Home/EditExpense/" + id, // ID передаём в URL // if same name with http atribute arg, it works - ???
-        type: "PUT",
-        contentType: "application/json",
-        data: JSON.stringify(expense),
-        success: function (result) {
-            console.log("Ответ сервера:", result);
-            if (result.success) {
-                window.location.href = result.redirectUrl;
-            } else {
-                alert("Ошибка при обновлении: " + (result.message || "Неизвестная ошибка"));
-            }
-        },
-        error: function (xhr, status, error) {
-            console.error("Ошибка при отправке запроса:", error);
-            alert("Ошибка при обновлении данных!");
+    try {
+        const response = await fetch(`/Home/EditExpense/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(expense)
+        });
+
+        const result = await response.json();
+        console.log("Server response:", result);
+
+        if (result.success) {
+            window.location.href = result.redirectUrl;
+        } else {
+            alert("Update error: " + (result.message || "Unknown error"));
         }
-    });
+    } catch (error) {
+        console.error("Request sending error:", error);
+        alert("Data update error");
+    }
 }
 
-function loadExpense(id) {
-    console.log("Загрузка расхода с ID:", id);
+async function loadExpense(id) {
+    console.log("Loading expense with ID:", id);
 
-    $.ajax({
-        url: "/Home/GetExpense/" + id, // API-запрос на получение данных
-        type: "GET",
-        success: function (expense) {
-            console.log("Данные получены:", expense);
+    try {
+        const response = await fetch(`/Home/GetExpense/${id}`);
+        if (!response.ok) throw new Error("Data loading error");
 
-            if (!expense) {
-                alert("Ошибка: Данные не найдены!");
-                return;
-            }
+        const expense = await response.json();
+        console.log("Data received:", expense);
 
-        },
-        error: function (xhr, status, error) {
-            console.error("Ошибка при загрузке данных:", error);
-            alert("Ошибка при получении данных!");
+        if (!expense) {
+            alert("Error: Data not found");
+            return;
         }
-    });
+
+        document.getElementById("ExpenseId").value = expense.id;
+        document.getElementById("ExpenseValue").value = expense.value;
+        document.getElementById("ExpenseDescription").value = expense.description;
+    } catch (error) {
+        console.error("Request sending error:", error);
+        alert("Data update error");
+    }
 }
 
-function deleteExpense(id) {
-    console.log("Функция deleteExpense вызвана");
+async function deleteExpense(id) {
+    console.log("Function deleteExpense executed");
 
-    $.ajax({
-        url: "/Home/DeleteExpense/" + id,
-        type: "DELETE",
-        success: function (response) {
-            console.log("Deleting expense with id:", id);
+    try {
+        const response = await fetch(`/Home/DeleteExpense/${id}`, { method: "DELETE" });
+        const result = await response.json();
 
-            if (response.success) {
-                window.location.href = response.redirectUrl;
-            } else {
-                alert("Ошибка при удалении: " + (response.message || "Неизвестная ошибка"));
-            }
-        },
-        error: function (xhr, status, error) {
-            console.error("Ошибка при удалении:", error);
-            alert("Ошибка при удалении данных!");
+        console.log("Deleting expense with id:", id);
+
+        if (result.success) {
+            window.location.href = result.redirectUrl;
+        } else {
+            alert("Delete error: " + (result.message || "Unknown error"));
         }
-    });
+    } catch (error) {
+        console.error("Request sending error:", error);
+        alert("Data update error");
+    }
 }

@@ -10,9 +10,9 @@ namespace ExpenseWebAppBLL.Services
 {
     public class ExpenseService
     {
-        private readonly IRepository<Expense> _expenseRepository;
+        private readonly IExpenseRepository _expenseRepository;
 
-        public ExpenseService(IRepository<Expense> repository)
+        public ExpenseService(IExpenseRepository repository)
         {
             _expenseRepository = repository;
         }
@@ -22,13 +22,17 @@ namespace ExpenseWebAppBLL.Services
         }
         public async Task<Expense?> GetExpenseByIdAsync(int id)
         {
+            if (id < 0) return null;
+
             return await _expenseRepository.GetByIdAsync(id);
         }
 
         public async Task<bool> AddExpenseAsync(Expense expense)
         {
-            if (expense.Id < 0 || expense.Value < 0)
+            if (expense.Id < 0 || expense.Value < 0 || string.IsNullOrEmpty(expense.Description))
                 return false;
+
+            expense.CreationDate = DateTime.Now;
 
             await _expenseRepository.AddAsync(expense);
             return true;
@@ -46,6 +50,9 @@ namespace ExpenseWebAppBLL.Services
 
         public async Task<bool> DeleteExpenseAsync(int id)
         {
+
+            if (id < 0) return false;
+
             await _expenseRepository.DeleteAsync(id);
             return true;
         }

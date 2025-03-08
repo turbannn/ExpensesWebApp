@@ -23,8 +23,8 @@ namespace ExpenseWebApp
             //!!! VERSION TROUBLE 9.0.0-preview.1.24081.2 for Relational, Core and Tools || 9.0.0-preview.1 for Pomelo MySql !!!
             builder.Services.AddDbContext<WebAppContext>(opt => opt.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 29))));
 
-            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            builder.Services.AddSingleton<ExpenseService>();
+            builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
+            builder.Services.AddScoped<ExpenseService>();
 
             var app = builder.Build();
 

@@ -7,20 +7,17 @@ using ExpenseWebAppDAL.Entities;
 
 namespace WebAppTest.Controllers
 {
+    //need async refactor
     //[Route("Home/[controller]")]
     //[ApiController]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        //private readonly WebAppContext _webAppContext; WebAppContext webAppContext,
-
         private readonly ExpenseService _expenseService;
 
         public HomeController(ILogger<HomeController> logger, ExpenseService expenseService)
         {
             _logger = logger;
-            //_webAppContext = webAppContext;
             _expenseService = expenseService;
         }
 

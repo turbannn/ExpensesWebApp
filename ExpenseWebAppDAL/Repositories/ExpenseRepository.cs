@@ -10,45 +10,43 @@ using ExpenseWebAppDAL.Interfaces;
 
 namespace ExpenseWebAppDAL.Repositories
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    public class ExpenseRepository : IExpenseRepository
     {
         private readonly WebAppContext _context;
-        private readonly DbSet<TEntity> _entities;
 
-        public Repository(WebAppContext context)
+        public ExpenseRepository(WebAppContext context)
         {
             _context = context;
-            _entities = _context.Set<TEntity>();
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        public async Task<IEnumerable<Expense>> GetAllAsync()
         {
-            return await _entities.ToListAsync();
+            return await _context.Expenses.ToListAsync();
         }
 
-        public async Task<TEntity?> GetByIdAsync(int id)
+        public async Task<Expense?> GetByIdAsync(int id)
         {
-            return await _entities.FindAsync(id);
+            return await _context.Expenses.FindAsync(id);
         }
 
-        public async Task AddAsync(TEntity entity)
+        public async Task AddAsync(Expense entity)
         {
-            await _entities.AddAsync(entity);
+            await _context.Expenses.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(TEntity entity)
+        public async Task UpdateAsync(Expense entity)
         {
-            _entities.Update(entity);
+            _context.Expenses.Update(entity);
             await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int id)
         {
-            var expense = await _entities.FindAsync(id);
+            var expense = await _context.Expenses.FindAsync(id);
             if (expense != null)
             {
-                _entities.Remove(expense);
+                _context.Expenses.Remove(expense);
                 await _context.SaveChangesAsync();
             }
         }
