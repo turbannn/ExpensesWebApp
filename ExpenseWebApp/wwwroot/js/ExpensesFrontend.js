@@ -48,6 +48,7 @@ async function updateExpense() {
     let id = document.getElementById("ExpenseId").value;
     let value = document.getElementById("ExpenseValue").value;
     let description = document.getElementById("ExpenseDescription").value;
+    let categoryId = document.getElementById("CategoryId").value || -1;
 
     if (!id || !value || !description) {
         alert("Error: fill all fields");
@@ -57,7 +58,8 @@ async function updateExpense() {
     let expense = {
         Id: parseInt(id),
         Value: parseFloat(value),
-        Description: description.trim()
+        Description: description.trim(),
+        CategoryId: parseInt(categoryId)
     };
 
     console.log("Sending data to server:", expense);

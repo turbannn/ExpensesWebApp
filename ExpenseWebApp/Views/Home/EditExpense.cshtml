@@ -2,13 +2,14 @@
     ViewData["Title"] = "EditExpense";
 }
 
-@model ExpenseWebAppDAL.Entities.Expense
+@model ExpenseWebAppBLL.DTOs.ExpenseDTO
 
 <div class="text-center">
     <h1 class="display-4">Edit an Expense</h1>
 </div>
 
-<script src="~/js/ExpensesFrontend.js" defer></script>
+<script src="~/js/ExpensesFrontend.js"></script>
+<script>window.onload = loadCategories();</script>
 
 <!-- EDIT HTTPPUT -->
 <form asp-controller="Home">
@@ -20,6 +21,13 @@
     <label class="mt-4">Description</label>
     <input class="form-control" type="text" id="ExpenseDescription" name="Description" placeholder="Enter description" value="@Model?.Description" />
 
+    <label class="mt-4">Categories</label>
+    <input class="form-control" type="text" id="ExpenseCategories" name="Categories" value="@Model?.Categories"/>
+
+    <label class="mt-4">Add Category</label>
+    <select class="form-control" id="CategoryId" name="CategoryId">
+        <option value="">Loading Categories...</option>
+    </select>
+
     <button class="btn btn-primary mt-4" type="button" onclick="updateExpense()">Ok</button>
 </form>
-

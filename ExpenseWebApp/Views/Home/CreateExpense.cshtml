@@ -2,7 +2,7 @@
     ViewData["Title"] = "CreateExpense";
 }
 
-@model ExpenseWebAppDAL.Entities.Expense
+@model ExpenseWebAppBLL.DTOs.ExpenseDTO
 
 <div class="text-center">
     <h1 class="display-4">Create an Expense</h1>
@@ -23,7 +23,7 @@
 
     <label class="mt-4">Category</label>
     <select class="form-control" id="CategoryId" name="CategoryId">
-        <option value="">Loading Categories.qwerrweqqrew..</option>
+        <option value="">Loading Categories...</option>
     </select>
 
     <button class="btn btn-primary mt-4" type="button" onclick="submitExpense()">Ok</button>

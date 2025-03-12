@@ -1,4 +1,5 @@
-﻿using ExpenseWebAppDAL.Interfaces;
+﻿using ExpenseWebAppDAL.Entities;
+using ExpenseWebAppDAL.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -17,8 +18,21 @@ namespace ExpenseWebAppBLL.DTOs
 
         [Required(ErrorMessage = "Description must not be empty")] //test
         public string? Description { get; set; }
-        public int CategoryId {  get; set; }    
-
+        public DateTime? CreationDate { get; set; }
+        public int CategoryId { get; set; }
         public string? Categories { get; set; }
+
+        public ExpenseDTO() 
+        {
+
+        }
+        public ExpenseDTO(Expense expense)
+        {
+            Id = expense.Id;
+            Value = expense.Value;
+            Description = expense.Description;
+            Categories = expense.Categories;
+            CreationDate = expense.CreationDate;
+        }
     }
 }

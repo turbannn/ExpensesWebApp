@@ -45,6 +45,14 @@ namespace ExpenseWebAppDAL.Repositories
                 {
                     expense.CategoriesList.Add(category);
                 }
+
+                StringBuilder str = new StringBuilder();
+                foreach(var c in expense.CategoriesList)
+                {
+                    str.Append(c.Name);
+                    str.Append("; ");
+                }
+                expense.Categories = str.ToString();
             }
 
             await _context.Expenses.AddAsync(expense);
@@ -52,9 +60,37 @@ namespace ExpenseWebAppDAL.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(Expense entity)
+        public async Task UpdateAsync(IExpenseTransferObject entity)
         {
-            _context.Expenses.Update(entity);
+#pragma warning disable CS8604
+            Expense expense = new Expense(entity.Id, entity.Value, entity.Description, DateTime.Now);
+#pragma warning restore CS8604
+
+            if (entity.CategoryId != -1)
+            {
+                var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == entity.CategoryId);
+
+                if(expense.CategoriesList == null)
+                {
+                    expense.CategoriesList= new List<Category>();
+                }
+
+                if (category != null)
+                {
+                    expense.CategoriesList.Add(category);
+                }
+
+                StringBuilder str = new StringBuilder();
+                foreach (var c in expense.CategoriesList)
+                {
+                    str.Append(c.Name);
+                    str.Append("; ");
+                }
+                expense.Categories = str.ToString();
+            }
+
+            _context.Expenses.Update(expense);
+
             await _context.SaveChangesAsync();
         }
 

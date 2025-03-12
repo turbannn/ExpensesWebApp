@@ -18,18 +18,32 @@ namespace ExpenseWebAppBLL.Services
         {
             _expenseRepository = expenseRepository;
         }
-        public async Task<IEnumerable<Expense>> GetAllExpensesAsync()
+        public async Task<IEnumerable<IExpenseTransferObject>> GetAllExpensesAsync()
         {
-            return await _expenseRepository.GetAllAsync();
+            var expenses = await _expenseRepository.GetAllAsync();
+
+            List<ExpenseDTO> expenseDTOs = new List<ExpenseDTO>();
+            foreach (var e in expenses)
+            {
+                expenseDTOs.Add(new ExpenseDTO(e));
+            }
+
+            return expenseDTOs;
         }
-        public async Task<Expense?> GetExpenseByIdAsync(int id)
+        public async Task<IExpenseTransferObject?> GetExpenseByIdAsync(int id)
         {
             if (id < 0) return null;
 
-            return await _expenseRepository.GetByIdAsync(id);
+            var expense = await _expenseRepository.GetByIdAsync(id);
+
+            if (expense == null) return null;
+
+            ExpenseDTO expenseDTO = new(expense);
+
+            return expenseDTO;
         }
 
-        public async Task<bool> AddExpenseAsync(ExpenseDTO expenseDTO)
+        public async Task<bool> AddExpenseAsync(IExpenseTransferObject expenseDTO)
         {
             if (expenseDTO.Id < 0 || expenseDTO.Value < 0 || string.IsNullOrEmpty(expenseDTO.Description))
                 return false;
@@ -39,13 +53,13 @@ namespace ExpenseWebAppBLL.Services
             return true;
         }
 
-        public async Task<bool> UpdateExpenseAsync(Expense expense)
+        public async Task<bool> UpdateExpenseAsync(IExpenseTransferObject expenseDTO)
         {
 
-            if (expense.Id < 0 || expense.Value < 0)
+            if (expenseDTO.Id < 0 || expenseDTO.Value < 0 || expenseDTO.Description == null)
                 return false;
 
-            await _expenseRepository.UpdateAsync(expense);
+            await _expenseRepository.UpdateAsync(expenseDTO);
             return true;
         }
 

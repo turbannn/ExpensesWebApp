@@ -3,7 +3,6 @@ using System.Diagnostics;
 using ExpenseWebApp.Models;
 using ExpenseWebAppBLL.Services;
 using ExpenseWebAppBLL.DTOs;
-using ExpenseWebAppDAL.Data;
 using ExpenseWebAppDAL.Entities;
 
 namespace WebAppTest.Controllers
@@ -66,12 +65,12 @@ namespace WebAppTest.Controllers
 
         //[HttpPut]
         [HttpPut("/Home/EditExpense/{id}")]
-        public IActionResult EditExpense(int id, [FromBody] Expense expense)
+        public IActionResult EditExpense([FromBody] ExpenseDTO expenseDTO) //int id
         {
-            if (id != expense.Id)
-                return BadRequest("ID mismatch");
+            //if (id != expenseDTO.Id)
+            //    return BadRequest("ID mismatch");
 
-            if (!_expenseService.UpdateExpenseAsync(expense).Result)
+            if (!_expenseService.UpdateExpenseAsync(expenseDTO).Result)
                 return BadRequest("Invalid data");
 
             return Json(new { success = true, redirectUrl = Url.Action("ExpensesView") });
