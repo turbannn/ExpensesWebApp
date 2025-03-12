@@ -13,16 +13,21 @@ namespace ExpenseWebAppDAL.Entities
         [Key]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Value must not be empty")]
+        [Required(ErrorMessage = "Value must not be empty")] //test
         public double Value { get; set; }
 
-        [Required(ErrorMessage = "Description must not be empty")]
+        [Required(ErrorMessage = "Description must not be empty")] //test
         public string? Description { get; set; }
         public DateTime? CreationDate { get; set; }
-        public string Categories => CategoriesList == null ? "" : string.Join("; ", CategoriesList);
+        public string? Categories => CategoriesList == null ? "" : string.Join("; ", CategoriesList);
     
         [NotMapped]
         public int[]? CategoriesIds { get; set; }
         public List<Category>? CategoriesList { get; set; }
+
+        public Expense()
+        {
+
+        }
     }
 }

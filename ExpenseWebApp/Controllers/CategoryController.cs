@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebAppTest.Controllers;
 using ExpenseWebAppDAL.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.JSInterop;
 
 namespace ExpenseWebApp.Controllers
 {
@@ -34,6 +35,14 @@ namespace ExpenseWebApp.Controllers
         public IActionResult CreateCategory()
         {
             return View();
+        }
+
+        [HttpGet("/Category/GetCategories")]
+        public IActionResult GetCategories(int id)
+        {
+            var categories = _categoryService.GetAllCategoriesAsync().Result;
+
+            return Json(categories);
         }
 
         [HttpPut("/Category/EditCategory/{id}")]

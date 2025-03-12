@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using ExpenseWebApp.Models;
 using ExpenseWebAppBLL.Services;
+using ExpenseWebAppBLL.DTOs;
 using ExpenseWebAppDAL.Data;
 using ExpenseWebAppDAL.Entities;
 
@@ -53,9 +54,10 @@ namespace WebAppTest.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateExpenseView([FromBody] Expense expense)
+        public IActionResult CreateExpenseView([FromBody] ExpenseDTO expenseDTO)
         {
-            if (!_expenseService.AddExpenseAsync(expense).Result)
+
+            if (!_expenseService.AddExpenseAsync(expense).Result) //async refactor
                 return BadRequest("Data not sent");
 
             return Json(new { success = true, redirectUrl = Url.Action("ExpensesView") });

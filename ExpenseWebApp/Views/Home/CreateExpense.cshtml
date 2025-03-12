@@ -8,7 +8,8 @@
     <h1 class="display-4">Create an Expense</h1>
 </div>
 
-<script src="~/js/ExpensesFrontend.js" defer></script>
+<script src="~/js/ExpensesFrontend.js"></script>
+<script> window.onload = loadCategories(); </script>
 
 <!-- Check for id to route the data!!! -->
 <form asp-controller="Home">
@@ -19,6 +20,11 @@
 
     <label class="mt-4">Description</label>
     <input class="form-control" type="text" id="ExpenseDescription" name="Description" placeholder="Enter description" value="@Model?.Description" />
+
+    <label class="mt-4">Category</label>
+    <select class="form-control" id="CategoryId" name="CategoryId">
+        <option value="">Loading Categories.qwerrweqqrew..</option>
+    </select>
 
     <button class="btn btn-primary mt-4" type="button" onclick="submitExpense()">Ok</button>
 </form>
