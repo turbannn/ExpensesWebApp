@@ -4,7 +4,7 @@
     const id = parseInt(document.getElementById("ExpenseId").value) || 0;
     const value = parseFloat(document.getElementById("ExpenseValue").value);
     const description = document.getElementById("ExpenseDescription").value.trim();
-    const categoryId = document.getElementById("CategoryId").value || -1; // Получаем выбранную категорию
+    const categoryId = document.getElementById("CategoryId").value || -1;
 
     if (!value) {
         alert("Error: Value cant be empty");
@@ -157,8 +157,3 @@ async function deleteExpense(id) {
         alert("Data update error");
     }
 }
-
-console.log("JS file loaded!");
-
-console.log("ExpensesFrontend.js загружен!");
-window.loadCategories = loadCategories; // Экспортируем функцию глобально

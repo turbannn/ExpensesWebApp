@@ -57,7 +57,7 @@ namespace WebAppTest.Controllers
         public IActionResult CreateExpenseView([FromBody] ExpenseDTO expenseDTO)
         {
 
-            if (!_expenseService.AddExpenseAsync(expense).Result) //async refactor
+            if (!_expenseService.AddExpenseAsync(expenseDTO).Result) //async refactor
                 return BadRequest("Data not sent");
 
             return Json(new { success = true, redirectUrl = Url.Action("ExpensesView") });

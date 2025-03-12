@@ -17,7 +17,7 @@ namespace ExpenseWebAppDAL.Entities
         public double Value { get; set; }
 
         [Required(ErrorMessage = "Description must not be empty")] //test
-        public string? Description { get; set; }
+        public string? Description { get; set; } //not null, need another migration
         public DateTime? CreationDate { get; set; }
         public string? Categories => CategoriesList == null ? "" : string.Join("; ", CategoriesList);
     
@@ -27,6 +27,14 @@ namespace ExpenseWebAppDAL.Entities
 
         public Expense()
         {
+            
+        }
+        public Expense(int id, double value, string description, DateTime creationDate)
+        {
+            Id = id;
+            Value = value;
+            Description = description;
+            CreationDate = creationDate;
 
         }
     }

@@ -29,9 +29,26 @@ namespace ExpenseWebAppDAL.Repositories
             return await _context.Expenses.FindAsync(id);
         }
 
-        public async Task AddAsync(Expense entity)
+        public async Task AddAsync(IExpenseTransferObject entity)
         {
-            await _context.Expenses.AddAsync(entity);
+#pragma warning disable CS8604
+            Expense expense = new Expense(entity.Id, entity.Value, entity.Description, DateTime.Now);
+#pragma warning restore CS8604
+
+            if (entity.CategoryId != -1)
+            {
+                expense.CategoriesList = new List<Category>();
+
+                var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == entity.CategoryId);
+
+                if (category != null)
+                {
+                    expense.CategoriesList.Add(category);
+                }
+            }
+
+            await _context.Expenses.AddAsync(expense);
+
             await _context.SaveChangesAsync();
         }
 

@@ -9,15 +9,14 @@ using ExpenseWebAppDAL.Interfaces;
 
 namespace ExpenseWebAppBLL.Services
 {
+    //Validation
     public class ExpenseService
     {
         private readonly IExpenseRepository _expenseRepository;
-        private readonly ICategoryRepository _categoryRepository;
 
-        public ExpenseService(IExpenseRepository expenseRepository, ICategoryRepository categoryRepository)
+        public ExpenseService(IExpenseRepository expenseRepository)
         {
             _expenseRepository = expenseRepository;
-            _categoryRepository = categoryRepository;
         }
         public async Task<IEnumerable<Expense>> GetAllExpensesAsync()
         {
@@ -35,24 +34,7 @@ namespace ExpenseWebAppBLL.Services
             if (expenseDTO.Id < 0 || expenseDTO.Value < 0 || string.IsNullOrEmpty(expenseDTO.Description))
                 return false;
 
-            Expense expense = new Expense();
-
-            expense.Id = expenseDTO.Id;
-            expense.Value = expenseDTO.Value;
-            expense.Description = expenseDTO.Description;
-            expense.CreationDate = DateTime.Now;
-
-            if (expenseDTO.CategoryId != -1)
-            {
-                expense.CategoriesList = new List<Category>();
-                var category = _categoryRepository.GetByIdAsync(expenseDTO.CategoryId).Result;
-                if (category != null)
-                {
-                    expense.CategoriesList.Add(category);
-                }
-            }
-
-            await _expenseRepository.AddAsync(expense);
+            await _expenseRepository.AddAsync(expenseDTO);
 
             return true;
         }

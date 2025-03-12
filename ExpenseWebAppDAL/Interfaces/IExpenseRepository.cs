@@ -11,8 +11,8 @@ namespace ExpenseWebAppDAL.Interfaces
     {
         Task<IEnumerable<Expense>> GetAllAsync();
         Task<Expense?> GetByIdAsync(int id);
-        Task AddAsync(Expense entityToAdd);
-        Task UpdateAsync(Expense entityToUpdate);
+        Task AddAsync(IExpenseTransferObject entityToAdd);
+        Task UpdateAsync(Expense entityToUpdate); //IExpenseTransferObject
         Task DeleteAsync(int id);
     }
 }
