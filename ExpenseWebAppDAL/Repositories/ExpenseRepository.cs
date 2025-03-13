@@ -59,7 +59,6 @@ namespace ExpenseWebAppDAL.Repositories
                 .Include(e => e.CategoriesList)
                 .FirstAsync(e => e.Id == entity.Id);
 
-
             expense.Value = entity.Value;
             expense.Description = entity.Description;
 
@@ -67,10 +66,8 @@ namespace ExpenseWebAppDAL.Repositories
             {
                 var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == entity.CategoryId);
 
-                if(expense.CategoriesList == null && category != null)
+                if(expense.CategoriesList != null && category != null)
                 {
-                    expense.CategoriesList = new List<Category>();
-
                     expense.CategoriesList.Add(category);
                 }
             }

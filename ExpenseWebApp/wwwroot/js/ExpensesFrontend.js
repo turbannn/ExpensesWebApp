@@ -63,7 +63,7 @@ async function updateExpense() {
         CategoryId: parseInt(categoryId),
         CategoryName: categoryName
     };
-
+    console.log("JSON payload:", JSON.stringify(expense));
     console.log("Sending data to server:", expense);
 
     try {

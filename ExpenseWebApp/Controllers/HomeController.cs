@@ -65,12 +65,11 @@ namespace WebAppTest.Controllers
 
         //[HttpPut]
         [HttpPut("/Home/EditExpense/{id}")]
-        public IActionResult EditExpense([FromBody] ExpenseDTO expenseDTO) //int id
+        public async Task<IActionResult> EditExpense([FromBody] ExpenseDTO expenseDTO)
         {
-            //if (id != expenseDTO.Id)
-            //    return BadRequest("ID mismatch");
+            var updateTaskResult = await _expenseService.UpdateExpenseAsync(expenseDTO);
 
-            if (!_expenseService.UpdateExpenseAsync(expenseDTO).Result)
+            if (!updateTaskResult)
                 return BadRequest("Invalid data");
 
             return Json(new { success = true, redirectUrl = Url.Action("ExpensesView") });
