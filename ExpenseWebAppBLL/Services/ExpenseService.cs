@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ExpenseWebAppBLL.DTOs;
 using ExpenseWebAppDAL.Entities;
 using ExpenseWebAppDAL.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseWebAppBLL.Services
 {
@@ -58,6 +59,18 @@ namespace ExpenseWebAppBLL.Services
 
             if (expenseDTO.Id < 0 || expenseDTO.Value < 0 || expenseDTO.Description == null)
                 return false;
+
+            if (expenseDTO.CategoryId != -1)
+            {
+                await _expenseRepository.UpdateWithCategoryAsync(expenseDTO);
+                return true;
+            }
+
+            if (expenseDTO.CategoryName != "-1")
+            {
+                await _expenseRepository.UpdateAndDeleteCategoryAsync(expenseDTO);
+                return true;
+            }
 
             await _expenseRepository.UpdateAsync(expenseDTO);
             return true;

@@ -62,25 +62,47 @@ namespace ExpenseWebAppDAL.Repositories
             expense.Value = entity.Value;
             expense.Description = entity.Description;
 
-            if (entity.CategoryId != -1)
-            {
-                var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == entity.CategoryId);
+            _context.Expenses.Update(expense);
 
-                if(expense.CategoriesList != null && category != null)
-                {
-                    expense.CategoriesList.Add(category);
-                }
-            }
-            if (entity.CategoryName != "-1")
-            {
-                var category = await _context.Categories.FirstOrDefaultAsync(c => c.Name == entity.CategoryName.Trim());
+            await _context.SaveChangesAsync();
+        }
 
-                if (category != null) 
-                {
+        public async Task UpdateWithCategoryAsync(IExpenseTransferObject entity)
+        {
+            var expense = await _context.Expenses
+                .Include(e => e.CategoriesList)
+                .FirstAsync(e => e.Id == entity.Id);
+
+            expense.Value = entity.Value;
+            expense.Description = entity.Description;
+
+            var category = await _context.Categories.FirstAsync(c => c.Id == entity.CategoryId);
+
 #pragma warning disable CS8602
-                    expense.CategoriesList.Remove(category);
+            expense.CategoriesList.Add(category);
 #pragma warning restore CS8602
-                }
+
+            _context.Expenses.Update(expense);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAndDeleteCategoryAsync(IExpenseTransferObject entity)
+        {
+            var expense = await _context.Expenses
+                .Include(e => e.CategoriesList)
+                .FirstAsync(e => e.Id == entity.Id);
+
+            expense.Value = entity.Value;
+            expense.Description = entity.Description;
+
+            var category = await _context.Categories.FirstOrDefaultAsync(c => c.Name == entity.CategoryName);
+
+            if (category != null)
+            {
+#pragma warning disable CS8602
+                expense.CategoriesList.Remove(category);
+#pragma warning restore CS8602
             }
 
             _context.Expenses.Update(expense);
