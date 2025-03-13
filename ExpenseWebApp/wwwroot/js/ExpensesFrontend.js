@@ -21,7 +21,7 @@
 
     console.log("Sending data:", expense);
 
-    fetch("/Home/CreateExpenseView", {
+    fetch("/Expense/CreateExpense", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(expense)
@@ -67,7 +67,7 @@ async function updateExpense() {
     console.log("Sending data to server:", expense);
 
     try {
-        const response = await fetch(`/Home/EditExpense/${id}`, {
+        const response = await fetch(`/Expense/EditExpense/${id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(expense)
@@ -123,7 +123,7 @@ async function loadExpense(id) {
     console.log("Loading expense with ID:", id);
 
     try {
-        const response = await fetch(`/Home/GetExpense/${id}`);
+        const response = await fetch(`/Expense/GetExpense/${id}`);
         if (!response.ok) throw new Error("Data loading error");
 
         const expense = await response.json();
@@ -147,7 +147,7 @@ async function deleteExpense(id) {
     console.log("Function deleteExpense executed");
 
     try {
-        const response = await fetch(`/Home/DeleteExpense/${id}`, { method: "DELETE" });
+        const response = await fetch(`/Expense/DeleteExpense/${id}`, { method: "DELETE" });
         const result = await response.json();
 
         console.log("Deleting expense with id:", id);
@@ -164,8 +164,8 @@ async function deleteExpense(id) {
 }
 
 function RedirectToExpenseCreation() {
-    window.location.href = "/Home/CreateExpense";
+    window.location.href = "/Expense/CreateExpense";
 }
 function RedirectToExpenseEditing(expenseId) {
-    window.location.href = `/Home/EditExpense/${expenseId}`;
+    window.location.href = `/Expense/EditExpense/${expenseId}`;
 }

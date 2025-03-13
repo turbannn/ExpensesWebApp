@@ -35,6 +35,8 @@ namespace ExpenseWebAppDAL.Repositories
             Expense expense = new Expense(entity.Id, entity.Value, entity.Description);
 #pragma warning restore CS8604
 
+            expense.CreationDate = DateTime.Now;
+
             if (entity.CategoryId != -1)
             {
                 expense.CategoriesList = new List<Category>();

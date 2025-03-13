@@ -60,7 +60,6 @@
                         </td>
                         <td>
                             <button type="button" class="btn btn-light" onclick="RedirectToExpenseEditing(@e.Id)">Edit</button>
-                            <a asp-controller="Home" asp-action="ExpenseRedirection" asp-route-id="@e.Id">Edit</a>
                             <button asp-controller="Home" type="button" class="btn btn-light" onclick="deleteExpense(@e.Id)">Delete</button>
                         </td>
                     </tr>

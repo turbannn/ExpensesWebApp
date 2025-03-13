@@ -13,91 +13,20 @@ namespace WebAppTest.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ExpenseService _expenseService;
 
-        public HomeController(ILogger<HomeController> logger, ExpenseService expenseService)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _expenseService = expenseService;
         }
 
-        public IActionResult Index() //NOT supposed to be named like an cshtml file
+        public IActionResult Index()
         {
             return View();
         }
 
         public IActionResult Privacy()
         {
-            return View();//can be called with args, args are name of cshtml file to redirect
-            //!!! it seeks for file with that name
-        }
-
-        public IActionResult ExpensesView() //same as cshtml
-        {
-            var expenses = _expenseService.GetAllExpensesAsync().Result;
-
-            var totalExpenses = expenses.Sum(x => x.Value);
-
-            ViewBag.Expenses = totalExpenses;
-
-            return View(expenses);
-        }
-
-        [HttpPost("/Home/CreateExpenseView")]
-        public IActionResult CreateExpenseView([FromBody] ExpenseDTO expenseDTO)
-        {
-
-            if (!_expenseService.AddExpenseAsync(expenseDTO).Result) //async refactor
-                return BadRequest("Data not sent");
-
-            return Json(new { success = true, redirectUrl = Url.Action("ExpensesView") });
-            //return RedirectToAction("ExpensesView"); //returns method
-        }
-        [Route("/Home/CreateExpense")]
-        public IActionResult CreateExpense()
-        {
             return View();
-        }
-        //[HttpPut]
-        [HttpPut("/Home/EditExpense/{id}")]
-        public async Task<IActionResult> EditExpense([FromBody] ExpenseDTO expenseDTO)
-        {
-            var updateTaskResult = await _expenseService.UpdateExpenseAsync(expenseDTO);
-
-            if (!updateTaskResult)
-                return BadRequest("Invalid data");
-
-            return Json(new { success = true, redirectUrl = Url.Action("ExpensesView") });
-        }
-
-        [Route("/Home/EditExpense/{id}")]
-        public async Task<IActionResult> EditExpense(int id)
-        {
-            var expense = await _expenseService.GetExpenseByIdAsync(id);
-
-            if (expense == null) return NotFound();
-
-            return View(expense);
-        }
-
-        [HttpGet("Home/GetExpense/{id}")]
-        public IActionResult GetExpense(int id)
-        {
-            var expense = _expenseService.GetExpenseByIdAsync(id).Result;
-
-            if (expense == null)
-                return NotFound(new { success = false, message = "Expense not found" });
-
-            return Ok(expense);
-        }
-
-        [HttpDelete("Home/DeleteExpense/{id}")]
-        public IActionResult DeleteExpense(int id)
-        {
-            if (!_expenseService.DeleteExpenseAsync(id).Result)
-                return BadRequest("Invalid data");
-
-            return Json(new { success = true, redirectUrl = Url.Action("ExpensesView") });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
