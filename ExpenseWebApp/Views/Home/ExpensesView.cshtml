@@ -9,6 +9,7 @@
 <div class="text-center">
     <h1 class="display-4">Expenses</h1>
     <br />
+    <a class="btn btn-secondary" onclick="RedirectToExpenseCreation()">Create new</a>
     <hr />
     <h3>Total Expenses: $@ViewBag.Expenses</h3>
     <br />
@@ -58,6 +59,7 @@
                             @e.Categories
                         </td>
                         <td>
+                            <button type="button" class="btn btn-light" onclick="RedirectToExpenseEditing(@e.Id)">Edit</button>
                             <a asp-controller="Home" asp-action="ExpenseRedirection" asp-route-id="@e.Id">Edit</a>
                             <button asp-controller="Home" type="button" class="btn btn-light" onclick="deleteExpense(@e.Id)">Delete</button>
                         </td>

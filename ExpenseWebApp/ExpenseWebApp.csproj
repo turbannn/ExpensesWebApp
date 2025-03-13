@@ -23,4 +23,8 @@
     <ProjectReference Include="..\ExpenseWebAppDAL\ExpenseWebAppDAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Expense\" />
+  </ItemGroup>
+
 </Project>

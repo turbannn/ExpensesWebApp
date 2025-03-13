@@ -42,17 +42,8 @@ namespace WebAppTest.Controllers
 
             return View(expenses);
         }
-        public IActionResult ExpenseRedirection(int? id)
-        {
-            if (id != null)
-            {
-                var exp = _expenseService.GetExpenseByIdAsync(Convert.ToInt32(id)).Result;
-                return View("EditExpense", exp);
-            }
-            return View("CreateExpense"); //returns cshtml
-        }
 
-        [HttpPost]
+        [HttpPost("/Home/CreateExpenseView")]
         public IActionResult CreateExpenseView([FromBody] ExpenseDTO expenseDTO)
         {
 
@@ -62,7 +53,11 @@ namespace WebAppTest.Controllers
             return Json(new { success = true, redirectUrl = Url.Action("ExpensesView") });
             //return RedirectToAction("ExpensesView"); //returns method
         }
-
+        [Route("/Home/CreateExpense")]
+        public IActionResult CreateExpense()
+        {
+            return View();
+        }
         //[HttpPut]
         [HttpPut("/Home/EditExpense/{id}")]
         public async Task<IActionResult> EditExpense([FromBody] ExpenseDTO expenseDTO)
@@ -73,6 +68,16 @@ namespace WebAppTest.Controllers
                 return BadRequest("Invalid data");
 
             return Json(new { success = true, redirectUrl = Url.Action("ExpensesView") });
+        }
+
+        [Route("/Home/EditExpense/{id}")]
+        public async Task<IActionResult> EditExpense(int id)
+        {
+            var expense = await _expenseService.GetExpenseByIdAsync(id);
+
+            if (expense == null) return NotFound();
+
+            return View(expense);
         }
 
         [HttpGet("Home/GetExpense/{id}")]

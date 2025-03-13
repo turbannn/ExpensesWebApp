@@ -162,3 +162,10 @@ async function deleteExpense(id) {
         alert("Data update error");
     }
 }
+
+function RedirectToExpenseCreation() {
+    window.location.href = "/Home/CreateExpense";
+}
+function RedirectToExpenseEditing(expenseId) {
+    window.location.href = `/Home/EditExpense/${expenseId}`;
+}
