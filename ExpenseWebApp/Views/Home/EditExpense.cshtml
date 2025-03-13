@@ -29,5 +29,19 @@
         <option value="">Loading Categories...</option>
     </select>
 
+    <label class="mt-4">Delete Category</label>
+    <select class="form-control" id="CategoryName" name="CategoryName">
+        <option value="">Choose option</option>
+        @{
+            if (Model?.Categories != null)
+            {
+                foreach (var e in Model.Categories.Split(";"))
+                {
+                    <option value="@e">@e</option>
+                }
+            }
+        }
+    </select>
+
     <button class="btn btn-primary mt-4" type="button" onclick="updateExpense()">Ok</button>
 </form>

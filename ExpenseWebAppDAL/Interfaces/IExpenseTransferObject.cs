@@ -10,7 +10,8 @@ namespace ExpenseWebAppDAL.Interfaces
     public interface IExpenseTransferObject : ITransferObject
     {
         double Value { get; set; }
-        string? Description { get; set; }
-        int CategoryId { get; set; }
+        string Description { get; set; }
+        int CategoryId { get; set; } //used when want to add
+        string CategoryName { get; set; } //used when want to delete
     }
 }

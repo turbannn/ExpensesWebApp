@@ -49,6 +49,7 @@ async function updateExpense() {
     let value = document.getElementById("ExpenseValue").value;
     let description = document.getElementById("ExpenseDescription").value;
     let categoryId = document.getElementById("CategoryId").value || -1;
+    let categoryName = document.getElementById("CategoryName").value || "-1";
 
     if (!id || !value || !description) {
         alert("Error: fill all fields");
@@ -59,7 +60,8 @@ async function updateExpense() {
         Id: parseInt(id),
         Value: parseFloat(value),
         Description: description.trim(),
-        CategoryId: parseInt(categoryId)
+        CategoryId: parseInt(categoryId),
+        CategoryName: categoryName
     };
 
     console.log("Sending data to server:", expense);
@@ -116,6 +118,7 @@ function loadCategories() {
             alert("Couldnt load categories");
         });
 }
+
 async function loadExpense(id) {
     console.log("Loading expense with ID:", id);
 

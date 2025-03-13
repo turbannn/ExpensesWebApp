@@ -9,7 +9,7 @@ using ExpenseWebAppDAL.Interfaces;
 
 namespace ExpenseWebAppBLL.Services
 {
-    //Validation
+    //Validation or Transformation
     public class ExpenseService
     {
         private readonly IExpenseRepository _expenseRepository;

@@ -21,18 +21,18 @@ namespace ExpenseWebAppDAL.Repositories
 
         public async Task<IEnumerable<Expense>> GetAllAsync()
         {
-            return await _context.Expenses.ToListAsync();
+            return await _context.Expenses.Include(e => e.CategoriesList).ToListAsync();
         }
 
         public async Task<Expense?> GetByIdAsync(int id)
         {
-            return await _context.Expenses.FindAsync(id);
+            return await _context.Expenses.Include(e => e.CategoriesList).FirstOrDefaultAsync(e => e.Id == id);
         }
 
         public async Task AddAsync(IExpenseTransferObject entity)
         {
 #pragma warning disable CS8604
-            Expense expense = new Expense(entity.Id, entity.Value, entity.Description, DateTime.Now);
+            Expense expense = new Expense(entity.Id, entity.Value, entity.Description);
 #pragma warning restore CS8604
 
             if (entity.CategoryId != -1)
@@ -44,15 +44,8 @@ namespace ExpenseWebAppDAL.Repositories
                 if (category != null)
                 {
                     expense.CategoriesList.Add(category);
+                    expense.Categories = category.Name + "; ";
                 }
-
-                StringBuilder str = new StringBuilder();
-                foreach(var c in expense.CategoriesList)
-                {
-                    str.Append(c.Name);
-                    str.Append("; ");
-                }
-                expense.Categories = str.ToString();
             }
 
             await _context.Expenses.AddAsync(expense);
@@ -62,31 +55,35 @@ namespace ExpenseWebAppDAL.Repositories
 
         public async Task UpdateAsync(IExpenseTransferObject entity)
         {
-#pragma warning disable CS8604
-            Expense expense = new Expense(entity.Id, entity.Value, entity.Description, DateTime.Now);
-#pragma warning restore CS8604
+            var expense = await _context.Expenses
+                .Include(e => e.CategoriesList)
+                .FirstAsync(e => e.Id == entity.Id);
+
+
+            expense.Value = entity.Value;
+            expense.Description = entity.Description;
 
             if (entity.CategoryId != -1)
             {
                 var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == entity.CategoryId);
 
-                if(expense.CategoriesList == null)
+                if(expense.CategoriesList == null && category != null)
                 {
-                    expense.CategoriesList= new List<Category>();
-                }
+                    expense.CategoriesList = new List<Category>();
 
-                if (category != null)
-                {
                     expense.CategoriesList.Add(category);
                 }
+            }
+            if (entity.CategoryName != "-1")
+            {
+                var category = await _context.Categories.FirstOrDefaultAsync(c => c.Name == entity.CategoryName.Trim());
 
-                StringBuilder str = new StringBuilder();
-                foreach (var c in expense.CategoriesList)
+                if (category != null) 
                 {
-                    str.Append(c.Name);
-                    str.Append("; ");
+#pragma warning disable CS8602
+                    expense.CategoriesList.Remove(category);
+#pragma warning restore CS8602
                 }
-                expense.Categories = str.ToString();
             }
 
             _context.Expenses.Update(expense);

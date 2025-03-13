@@ -17,12 +17,13 @@ namespace ExpenseWebAppBLL.DTOs
         public double Value { get; set; }
 
         [Required(ErrorMessage = "Description must not be empty")] //test
-        public string? Description { get; set; }
+        public string Description { get; set; } = null!;
         public DateTime? CreationDate { get; set; }
         public int CategoryId { get; set; }
+        public string CategoryName { get; set; } = null!;
         public string? Categories { get; set; }
 
-        public ExpenseDTO() 
+        public ExpenseDTO()
         {
 
         }
@@ -31,8 +32,18 @@ namespace ExpenseWebAppBLL.DTOs
             Id = expense.Id;
             Value = expense.Value;
             Description = expense.Description;
-            Categories = expense.Categories;
             CreationDate = expense.CreationDate;
+
+            StringBuilder str = new StringBuilder();
+            if(expense.CategoriesList != null)
+            {
+                foreach (var c in expense.CategoriesList)
+                {
+                    str.Append(c.Name);
+                    str.Append("; ");
+                }
+            }
+            Categories = str.ToString();
         }
     }
 }
