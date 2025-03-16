@@ -21,7 +21,11 @@ namespace ExpenseWebApp
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
             //!!! VERSION TROUBLE 9.0.0-preview.1.24081.2 for Relational, Core and Tools || 9.0.0-preview.1 for Pomelo MySql !!!
-            builder.Services.AddDbContext<WebAppContext>(opt => opt.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 29))));
+            builder.Services.AddDbContext<WebAppContext>(opt =>
+            {
+                opt.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 29)));
+                
+            });
 
             builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
@@ -47,8 +51,7 @@ namespace ExpenseWebApp
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}"
-                );
+                pattern: "{controller=Home}/{action=Index}/{id?}"                );
 
             app.Run();
         }

@@ -10,15 +10,17 @@ namespace ExpenseWebAppDAL.Entities;
 
 public class Expense
 {
-    [Key]
+    [Column("Id")]
     public int Id { get; set; }
 
-    [Required(ErrorMessage = "Value must not be empty")] //test
+    [Column("Value")]
     public double Value { get; set; }
 
-    [Required(ErrorMessage = "Description must not be empty")] //test
+    [Column("Description")]
     public string Description { get; set; } = null!;
+    [Column("CreationDate")]
     public DateTime? CreationDate { get; set; }
+    [Column("Categories")]
     public string? Categories {  get; set; }
 
     [NotMapped]

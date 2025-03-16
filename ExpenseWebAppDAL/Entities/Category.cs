@@ -10,9 +10,10 @@ namespace ExpenseWebAppDAL.Entities;
 
 public class Category
 {
-    [Key]
+    [Column("Id")]
     public int Id { get; set; }
-    [Required(ErrorMessage = "Must have a name")]
+
+    [Column("Name")]
     public string Name { get; set; } = null!;
     
     [NotMapped]
