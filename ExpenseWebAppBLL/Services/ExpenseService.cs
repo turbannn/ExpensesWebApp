@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using ExpenseWebAppBLL.DTOs;
 using ExpenseWebAppDAL.Entities;
 using ExpenseWebAppDAL.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseWebAppBLL.Services
 {
@@ -49,7 +48,12 @@ namespace ExpenseWebAppBLL.Services
             if (expenseDTO.Id < 0 || expenseDTO.Value < 0 || string.IsNullOrEmpty(expenseDTO.Description))
                 return false;
 
-            await _expenseRepository.AddAsync(expenseDTO);
+            var expense = new Expense();
+            expense.Id = expenseDTO.Id;
+            expense.Value = expenseDTO.Value;
+            expense.Description = expenseDTO.Description;
+
+            await _expenseRepository.AddAsync(expense, expenseDTO.CategoryId);
 
             return true;
         }
@@ -57,22 +61,24 @@ namespace ExpenseWebAppBLL.Services
         public async Task<bool> UpdateExpenseAsync(IExpenseTransferObject expenseDTO)
         {
 
-            if (expenseDTO.Id < 0 || expenseDTO.Value < 0 || expenseDTO.Description == null)
+            if (expenseDTO.Id < 0 || expenseDTO.Value < 0 || string.IsNullOrEmpty(expenseDTO.Description))
                 return false;
+
+            var expense = new Expense(expenseDTO.Id, expenseDTO.Value, expenseDTO.Description);
 
             if (expenseDTO.CategoryId != -1)
             {
-                await _expenseRepository.UpdateWithCategoryAsync(expenseDTO);
+                await _expenseRepository.UpdateWithCategoryAsync(expense, expenseDTO.CategoryId);
                 return true;
             }
 
             if (expenseDTO.CategoryName != "-1")
             {
-                await _expenseRepository.UpdateAndDeleteCategoryAsync(expenseDTO);
+                await _expenseRepository.UpdateAndDeleteCategoryAsync(expense, expenseDTO.CategoryName);
                 return true;
             }
 
-            await _expenseRepository.UpdateAsync(expenseDTO);
+            await _expenseRepository.UpdateAsync(expense);
             return true;
         }
 

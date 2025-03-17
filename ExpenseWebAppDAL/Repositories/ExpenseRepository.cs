@@ -29,7 +29,7 @@ namespace ExpenseWebAppDAL.Repositories
             return await _context.Expenses.Include(e => e.CategoriesList).FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public async Task AddAsync(IExpenseTransferObject entity)
+        public async Task AddAsync(Expense entity, int categoryId = -1)
         {
 #pragma warning disable CS8604
             Expense expense = new Expense(entity.Id, entity.Value, entity.Description);
@@ -37,11 +37,11 @@ namespace ExpenseWebAppDAL.Repositories
 
             expense.CreationDate = DateTime.Now;
 
-            if (entity.CategoryId != -1)
+            if (categoryId != -1)
             {
                 expense.CategoriesList = new List<Category>();
 
-                var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == entity.CategoryId);
+                var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
 
                 if (category != null)
                 {
@@ -55,7 +55,7 @@ namespace ExpenseWebAppDAL.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(IExpenseTransferObject entity)
+        public async Task UpdateAsync(Expense entity)
         {
             var expense = await _context.Expenses
                 .Include(e => e.CategoriesList)
@@ -69,42 +69,42 @@ namespace ExpenseWebAppDAL.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateWithCategoryAsync(IExpenseTransferObject entity)
+        public async Task UpdateWithCategoryAsync(Expense entity, int categoryId)
         {
             var expense = await _context.Expenses
                 .Include(e => e.CategoriesList)
                 .FirstAsync(e => e.Id == entity.Id);
 
+            expense.CategoriesList ??= new List<Category>();
+
             expense.Value = entity.Value;
             expense.Description = entity.Description;
 
-            var category = await _context.Categories.FirstAsync(c => c.Id == entity.CategoryId);
+            var category = await _context.Categories.FirstAsync(c => c.Id == categoryId);
 
-#pragma warning disable CS8602
             expense.CategoriesList.Add(category);
-#pragma warning restore CS8602
 
             _context.Expenses.Update(expense);
 
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAndDeleteCategoryAsync(IExpenseTransferObject entity)
+        public async Task UpdateAndDeleteCategoryAsync(Expense entity, string categoryName)
         {
             var expense = await _context.Expenses
                 .Include(e => e.CategoriesList)
                 .FirstAsync(e => e.Id == entity.Id);
 
+            expense.CategoriesList ??= new List<Category>();
+
             expense.Value = entity.Value;
             expense.Description = entity.Description;
 
-            var category = await _context.Categories.FirstOrDefaultAsync(c => c.Name == entity.CategoryName);
+            var category = await _context.Categories.FirstOrDefaultAsync(c => c.Name == categoryName.Trim());
 
             if (category != null)
             {
-#pragma warning disable CS8602
                 expense.CategoriesList.Remove(category);
-#pragma warning restore CS8602
             }
 
             _context.Expenses.Update(expense);

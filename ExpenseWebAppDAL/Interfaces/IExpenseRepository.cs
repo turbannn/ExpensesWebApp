@@ -7,9 +7,9 @@ using ExpenseWebAppDAL.Entities;
 
 namespace ExpenseWebAppDAL.Interfaces
 {
-    public interface IExpenseRepository : IRepository<Expense, IExpenseTransferObject>
+    public interface IExpenseRepository : IRepository<Expense>
     {
-        Task UpdateWithCategoryAsync(IExpenseTransferObject entity);
-        Task UpdateAndDeleteCategoryAsync(IExpenseTransferObject entity);
+        Task UpdateWithCategoryAsync(Expense entity, int categoryId);
+        Task UpdateAndDeleteCategoryAsync(Expense entity, string categoryName);
     }
 }
