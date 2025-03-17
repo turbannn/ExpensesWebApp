@@ -10,17 +10,17 @@ namespace ExpenseWebAppDAL.Entities;
 
 public class Expense
 {
-    [Column("Id")]
+    [Column("expense_id")]
     public int Id { get; set; }
 
-    [Column("Value")]
+    [Column("expense_value")]
     public double Value { get; set; }
 
-    [Column("Description")]
+    [Column("expense_description")]
     public string Description { get; set; } = null!;
-    [Column("CreationDate")]
+    [Column("expense_creationDate")]
     public DateTime? CreationDate { get; set; }
-    [Column("Categories")]
+    [Column("expense_categories")]
     public string? Categories {  get; set; }
 
     [NotMapped]

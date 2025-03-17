@@ -33,6 +33,10 @@ namespace ExpenseWebAppDAL.Data
                 .HasMany(e => e.CategoriesList)
                 .WithMany(c => c.Expenses);
 
+            modelBuilder.Entity<Expense>()
+                .Property(e => e.CreationDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP()");
+
             //Categories
             modelBuilder.Entity<Category>().HasKey(c => c.Id);
 

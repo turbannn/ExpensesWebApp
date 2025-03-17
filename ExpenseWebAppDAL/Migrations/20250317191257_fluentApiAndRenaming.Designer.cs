@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExpenseWebAppDAL.Migrations
 {
     [DbContext(typeof(WebAppContext))]
-    [Migration("20250316003951_Fifth")]
-    partial class Fifth
+    [Migration("20250317191257_fluentApiAndRenaming")]
+    partial class fluentApiAndRenaming
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -68,26 +68,28 @@ namespace ExpenseWebAppDAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("Id");
+                        .HasColumnName("expense_id");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Categories")
                         .HasColumnType("longtext")
-                        .HasColumnName("Categories");
+                        .HasColumnName("expense_categories");
 
                     b.Property<DateTime?>("CreationDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("CreationDate");
+                        .HasColumnName("expense_creationDate")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("longtext")
-                        .HasColumnName("Description");
+                        .HasColumnName("expense_description");
 
                     b.Property<double>("Value")
                         .HasColumnType("double")
-                        .HasColumnName("Value");
+                        .HasColumnName("expense_value");
 
                     b.HasKey("Id");
 
