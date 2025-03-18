@@ -24,6 +24,7 @@ namespace ExpenseWebApp
             builder.Services.AddDbContext<WebAppContext>(opt =>
             {
                 opt.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 29)));
+                //opt.LogTo(Console.WriteLine);
                 
             });
 

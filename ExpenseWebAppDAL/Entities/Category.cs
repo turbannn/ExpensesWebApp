@@ -10,10 +10,10 @@ namespace ExpenseWebAppDAL.Entities;
 
 public class Category
 {
-    [Column("Id")]
+    [Column(nameof(Id))]
     public int Id { get; set; }
 
-    [Column("Name")]
+    [Column(nameof(Name))]
     public string Name { get; set; } = null!;
     
     [NotMapped]

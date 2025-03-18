@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExpenseWebAppDAL.Migrations
 {
     [DbContext(typeof(WebAppContext))]
-    [Migration("20250317191257_fluentApiAndRenaming")]
-    partial class fluentApiAndRenaming
+    [Migration("20250318200030_IndexesAndPropertiesUpdates")]
+    partial class IndexesAndPropertiesUpdates
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,16 +44,14 @@ namespace ExpenseWebAppDAL.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("Id");
+                        .HasColumnType("int");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(35)
-                        .HasColumnType("varchar(35)")
-                        .HasColumnName("Name");
+                        .HasColumnType("varchar(35)");
 
                     b.HasKey("Id");
 
@@ -67,29 +65,24 @@ namespace ExpenseWebAppDAL.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("expense_id");
+                        .HasColumnType("int");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Categories")
-                        .HasColumnType("longtext")
-                        .HasColumnName("expense_categories");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime?>("CreationDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("expense_creationDate")
-                        .HasDefaultValueSql("getdate()");
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP()");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasColumnName("expense_description");
+                        .HasColumnType("longtext");
 
                     b.Property<double>("Value")
-                        .HasColumnType("double")
-                        .HasColumnName("expense_value");
+                        .HasColumnType("double");
 
                     b.HasKey("Id");
 

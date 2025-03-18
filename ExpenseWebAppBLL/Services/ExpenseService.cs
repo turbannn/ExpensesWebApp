@@ -55,6 +55,7 @@ namespace ExpenseWebAppBLL.Services
             if(expenseDTO.CategoryId != -1)
             {
                 await _expenseRepository.AddWithCategoryAsync(expense, expenseDTO.CategoryId);
+                return true;
             }
 
             await _expenseRepository.AddAsync(expense);

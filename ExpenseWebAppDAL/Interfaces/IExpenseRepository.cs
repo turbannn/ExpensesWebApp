@@ -11,5 +11,5 @@ public interface IExpenseRepository : IRepository<Expense>
 {
     Task UpdateWithCategoryAsync(Expense entity, int categoryId);
     Task UpdateAndDeleteCategoryAsync(Expense entity, string categoryName);
-    Task AddWithCategoryAsync(Expense entity, int categoryId = -1);
+    Task AddWithCategoryAsync(Expense entity, int categoryId);
 }

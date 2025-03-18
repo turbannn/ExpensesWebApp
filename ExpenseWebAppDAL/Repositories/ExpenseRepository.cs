@@ -26,10 +26,8 @@ namespace ExpenseWebAppDAL.Repositories
 
         public async Task<Expense?> GetByIdAsync(int id)
         {
-            return await _context.Expenses.Include(e => e.CategoriesList).FirstOrDefaultAsync(e => e.Id == id);
+            return await _context.Expenses.AsNoTracking().Include(e => e.CategoriesList).FirstOrDefaultAsync(e => e.Id == id);
         }
-
-
 
         public async Task AddAsync(Expense entityToAdd)
         {
@@ -40,28 +38,19 @@ namespace ExpenseWebAppDAL.Repositories
         }
 
 
-        public async Task AddWithCategoryAsync(Expense entity, int categoryId = -1)
+        public async Task AddWithCategoryAsync(Expense entity, int categoryId)
         {
-#pragma warning disable CS8604
-            Expense expense = new Expense(entity.Id, entity.Value, entity.Description);
-#pragma warning restore CS8604
+            //expense.CreationDate = DateTime.Now;
 
-            expense.CreationDate = DateTime.Now;
+            var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
 
-            if (categoryId != -1)
+            if (category != null)
             {
-                expense.CategoriesList = new List<Category>();
-
-                var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
-
-                if (category != null)
-                {
-                    expense.CategoriesList.Add(category);
-                    expense.Categories = category.Name + "; ";
-                }
+                entity.CategoriesList = new List<Category> { category };
+                entity.Categories = category.Name + "; ";
             }
 
-            await _context.Expenses.AddAsync(expense);
+            await _context.Expenses.AddAsync(entity);
 
             await _context.SaveChangesAsync();
         }
@@ -70,12 +59,10 @@ namespace ExpenseWebAppDAL.Repositories
         {
             var expense = await _context.Expenses
                 .Include(e => e.CategoriesList)
-                .FirstAsync(e => e.Id == entity.Id);
+                .SingleAsync(e => e.Id == entity.Id);
 
             expense.Value = entity.Value;
             expense.Description = entity.Description;
-
-            _context.Expenses.Update(expense);
 
             await _context.SaveChangesAsync();
         }
@@ -84,7 +71,7 @@ namespace ExpenseWebAppDAL.Repositories
         {
             var expense = await _context.Expenses
                 .Include(e => e.CategoriesList)
-                .FirstAsync(e => e.Id == entity.Id);
+                .SingleAsync(e => e.Id == entity.Id);
 
             expense.CategoriesList ??= new List<Category>();
 
@@ -95,8 +82,6 @@ namespace ExpenseWebAppDAL.Repositories
 
             expense.CategoriesList.Add(category);
 
-            _context.Expenses.Update(expense);
-
             await _context.SaveChangesAsync();
         }
 
@@ -104,7 +89,7 @@ namespace ExpenseWebAppDAL.Repositories
         {
             var expense = await _context.Expenses
                 .Include(e => e.CategoriesList)
-                .FirstAsync(e => e.Id == entity.Id);
+                .SingleAsync(e => e.Id == entity.Id);
 
             expense.CategoriesList ??= new List<Category>();
 
@@ -117,8 +102,6 @@ namespace ExpenseWebAppDAL.Repositories
             {
                 expense.CategoriesList.Remove(category);
             }
-
-            _context.Expenses.Update(expense);
 
             await _context.SaveChangesAsync();
         }
