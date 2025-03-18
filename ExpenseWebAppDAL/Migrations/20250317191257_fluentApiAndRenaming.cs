@@ -49,40 +49,19 @@ namespace ExpenseWebAppDAL.Migrations
                 name: "IX_Categories_Name",
                 table: "Categories");
 
-            migrationBuilder.RenameColumn(
-                name: "expense_value",
-                table: "Expenses",
-                newName: "Value");
+            migrationBuilder.Sql(@"ALTER TABLE Expenses CHANGE COLUMN expense_value Value DOUBLE;");
 
-            migrationBuilder.RenameColumn(
-                name: "expense_description",
-                table: "Expenses",
-                newName: "Description");
+            migrationBuilder.Sql(@"ALTER TABLE Expenses CHANGE COLUMN expense_description Description LONGTEXT;");
 
-            migrationBuilder.RenameColumn(
-                name: "expense_creationDate",
-                table: "Expenses",
-                newName: "CreationDate");
+            migrationBuilder.Sql(@"ALTER TABLE Expenses CHANGE COLUMN expense_creationDate CreationDate DATETIME;");
 
-            migrationBuilder.RenameColumn(
-                name: "expense_categories",
-                table: "Expenses",
-                newName: "Categories");
+            migrationBuilder.Sql(@"ALTER TABLE Expenses CHANGE COLUMN expense_categories Categories LONGTEXT;");
 
-            migrationBuilder.RenameColumn(
-                name: "expense_id",
-                table: "Expenses",
-                newName: "Id");
+            migrationBuilder.Sql(@"ALTER TABLE Expenses CHANGE COLUMN expense_id Id INT;");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreationDate",
-                table: "Expenses",
-                type: "datetime(6)",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "datetime(6)",
-                oldNullable: true,
-                oldDefaultValueSql: "getdate()");
+            migrationBuilder.Sql(@"ALTER TABLE `Expenses`
+                            MODIFY COLUMN `CreationDate` DATETIME(6) NULL DEFAULT CURRENT_TIMESTAMP;");
+
 
             migrationBuilder.AlterColumn<string>(
                 name: "Name",

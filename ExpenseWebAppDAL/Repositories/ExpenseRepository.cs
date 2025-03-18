@@ -29,7 +29,18 @@ namespace ExpenseWebAppDAL.Repositories
             return await _context.Expenses.Include(e => e.CategoriesList).FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public async Task AddAsync(Expense entity, int categoryId = -1)
+
+
+        public async Task AddAsync(Expense entityToAdd)
+        {
+
+            await _context.Expenses.AddAsync(entityToAdd);
+
+            await _context.SaveChangesAsync();
+        }
+
+
+        public async Task AddWithCategoryAsync(Expense entity, int categoryId = -1)
         {
 #pragma warning disable CS8604
             Expense expense = new Expense(entity.Id, entity.Value, entity.Description);

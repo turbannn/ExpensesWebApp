@@ -7,12 +7,8 @@ using System.Threading.Tasks;
 
 namespace ExpenseWebAppDAL.Interfaces
 {
-    public interface ICategoryRepository
+    public interface ICategoryRepository : IRepository<Category>
     {
-        Task<IEnumerable<Category>?> GetAllAsync();
-        Task<Category?> GetByIdAsync(int id);
-        Task AddAsync(Category entityToAdd);
-        Task UpdateAsync(Category entityToUpdate);
-        Task DeleteAsync(int id);
+
     }
 }

@@ -49,11 +49,15 @@ namespace ExpenseWebAppBLL.Services
                 return false;
 
             var expense = new Expense();
-            expense.Id = expenseDTO.Id;
             expense.Value = expenseDTO.Value;
             expense.Description = expenseDTO.Description;
 
-            await _expenseRepository.AddAsync(expense, expenseDTO.CategoryId);
+            if(expenseDTO.CategoryId != -1)
+            {
+                await _expenseRepository.AddWithCategoryAsync(expense, expenseDTO.CategoryId);
+            }
+
+            await _expenseRepository.AddAsync(expense);
 
             return true;
         }
