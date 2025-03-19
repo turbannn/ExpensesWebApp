@@ -40,14 +40,11 @@ namespace ExpenseWebAppDAL.Repositories
 
         public async Task AddWithCategoryAsync(Expense entity, int categoryId)
         {
-            //expense.CreationDate = DateTime.Now;
-
             var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
 
             if (category != null)
             {
                 entity.CategoriesList = new List<Category> { category };
-                entity.Categories = category.Name + "; ";
             }
 
             await _context.Expenses.AddAsync(entity);
@@ -57,9 +54,7 @@ namespace ExpenseWebAppDAL.Repositories
 
         public async Task UpdateAsync(Expense entity)
         {
-            var expense = await _context.Expenses
-                .Include(e => e.CategoriesList)
-                .SingleAsync(e => e.Id == entity.Id);
+            var expense = await _context.Expenses.SingleAsync(e => e.Id == entity.Id);
 
             expense.Value = entity.Value;
             expense.Description = entity.Description;

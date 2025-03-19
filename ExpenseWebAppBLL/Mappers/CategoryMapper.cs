@@ -26,6 +26,7 @@ namespace ExpenseWebAppBLL.Mappers
         {
             return new Category
             {
+                Id = categoryDTO.Id,
                 Name = categoryDTO.Name
             };
         }

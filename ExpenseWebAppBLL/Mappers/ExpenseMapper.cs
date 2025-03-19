@@ -33,11 +33,11 @@ namespace ExpenseWebAppBLL.Mappers
             };
         }
 
-        //No copy of Id. Mind using tracked update method
         internal static Expense ToEntity(IExpenseTransferObject expenseDTO)
         {
             return new Expense
             {
+                Id = expenseDTO.Id,
                 Value = expenseDTO.Value,
                 Description = expenseDTO.Description
             };
