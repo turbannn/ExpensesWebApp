@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ExpenseWebAppBLL.DTOs;
+using ExpenseWebAppBLL.Mappers;
 using ExpenseWebAppDAL.Entities;
 using ExpenseWebAppDAL.Interfaces;
 
 namespace ExpenseWebAppBLL.Services
 {
-    //Validation and Transformation
+    //Validation
     public class ExpenseService
     {
         private readonly IExpenseRepository _expenseRepository;
@@ -23,9 +24,11 @@ namespace ExpenseWebAppBLL.Services
             var expenses = await _expenseRepository.GetAllAsync();
 
             List<ExpenseDTO> expenseDTOs = new List<ExpenseDTO>();
+
             foreach (var e in expenses)
             {
-                expenseDTOs.Add(new ExpenseDTO(e));
+
+                expenseDTOs.Add(ExpenseMapper.ToDTO(e));
             }
 
             return expenseDTOs;
@@ -38,7 +41,7 @@ namespace ExpenseWebAppBLL.Services
 
             if (expense == null) return null;
 
-            ExpenseDTO expenseDTO = new(expense);
+            ExpenseDTO expenseDTO = ExpenseMapper.ToDTO(expense);
 
             return expenseDTO;
         }
@@ -48,9 +51,7 @@ namespace ExpenseWebAppBLL.Services
             if (expenseDTO.Id < 0 || expenseDTO.Value < 0 || string.IsNullOrEmpty(expenseDTO.Description))
                 return false;
 
-            var expense = new Expense();
-            expense.Value = expenseDTO.Value;
-            expense.Description = expenseDTO.Description;
+            var expense = ExpenseMapper.ToEntity(expenseDTO);
 
             if(expenseDTO.CategoryId != -1)
             {
@@ -69,7 +70,7 @@ namespace ExpenseWebAppBLL.Services
             if (expenseDTO.Id < 0 || expenseDTO.Value < 0 || string.IsNullOrEmpty(expenseDTO.Description))
                 return false;
 
-            var expense = new Expense(expenseDTO.Id, expenseDTO.Value, expenseDTO.Description);
+            var expense = ExpenseMapper.ToEntity(expenseDTO);
 
             if (expenseDTO.CategoryId != -1)
             {

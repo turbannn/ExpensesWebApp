@@ -5,6 +5,7 @@ using WebAppTest.Controllers;
 using ExpenseWebAppDAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.JSInterop;
+using ExpenseWebAppBLL.DTOs;
 
 namespace ExpenseWebApp.Controllers
 {
@@ -26,9 +27,9 @@ namespace ExpenseWebApp.Controllers
         }
 
         [HttpPost("/Category/CreateCategory")]
-        public async Task<IActionResult> CreateCategory([FromBody] Category category)
+        public async Task<IActionResult> CreateCategory([FromBody] CategoryDTO categoryDTO)
         {
-            await _categoryService.AddCategoryAsync(category);
+            await _categoryService.AddCategoryAsync(categoryDTO);
             return Json(new { success = true, redirectUrl = Url.Action("Index") });
         }
 
@@ -46,9 +47,10 @@ namespace ExpenseWebApp.Controllers
         }
 
         [HttpPut("/Category/EditCategory/{id}")]
-        public async Task<IActionResult> EditCategory([FromBody] Category category)
+        public async Task<IActionResult> EditCategory([FromBody] CategoryDTO categoryDTO)
         {
-            await _categoryService.UpdateCategoryAsync(category);
+            await _categoryService.UpdateCategoryAsync(categoryDTO);
+
             return Json(new { success = true, redirectUrl = Url.Action("Index") });
         }
 

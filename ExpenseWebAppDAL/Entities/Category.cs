@@ -15,10 +15,13 @@ public class Category
 
     [Column(nameof(Name))]
     public string Name { get; set; } = null!;
-    
-    [NotMapped]
-    public int[]? ExpensesIds {  get; set; }
+
     public List<Expense>? Expenses { get; set; }
+
+    public Category()
+    {
+
+    }
 
     public override string ToString()
     {

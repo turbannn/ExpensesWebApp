@@ -1,5 +1,9 @@
-﻿using ExpenseWebAppDAL.Entities;
+﻿using ExpenseWebAppBLL.DTOs;
+using ExpenseWebAppBLL.Interfaces;
+using ExpenseWebAppBLL.Mappers;
+using ExpenseWebAppDAL.Entities;
 using ExpenseWebAppDAL.Interfaces;
+using ExpenseWebAppDAL.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,42 +20,61 @@ namespace ExpenseWebAppBLL.Services
         {
             _categoryRepository = repository;
         }
-        public async Task<IEnumerable<Category>?> GetAllCategoriesAsync()
+        public async Task<IEnumerable<ICategoryTransferObject>?> GetAllCategoriesAsync()
         {
-            return await _categoryRepository.GetAllAsync();
+            var categories = await _categoryRepository.GetAllAsync();
+
+            List<CategoryDTO> categoryDTOs = new List<CategoryDTO>();
+            foreach (var c in categories)
+            {
+                categoryDTOs.Add(CategoryMapper.ToDTO(c));
+            }
+
+            return categoryDTOs;
         }
-        public async Task<Category?> GetCategoryByIdAsync(int id)
+        public async Task<ICategoryTransferObject?> GetCategoryByIdAsync(int id)
         {
             if (id < 0) return null;
 
-            return await _categoryRepository.GetByIdAsync(id);
+            var category = await _categoryRepository.GetByIdAsync(id);
+
+            if (category == null) return null;
+
+            CategoryDTO categoryDTO = CategoryMapper.ToDTO(category);
+
+            return categoryDTO;
         }
 
-        public async Task<bool> AddCategoryAsync(Category category)
+        public async Task<bool> AddCategoryAsync(ICategoryTransferObject categoryDTO)
         {
-            if (category.Id < 0)
+            if (categoryDTO.Id < 0 || string.IsNullOrEmpty(categoryDTO.Name))
                 return false;
 
+            Category category = CategoryMapper.ToEntity(categoryDTO);
+
             await _categoryRepository.AddAsync(category);
+
             return true;
         }
 
-        public async Task<bool> UpdateCategoryAsync(Category category)
+        public async Task<bool> UpdateCategoryAsync(ICategoryTransferObject categoryDTO)
         {
-
-            if (category.Id < 0)
+            if (categoryDTO.Id < 0 || string.IsNullOrEmpty(categoryDTO.Name))
                 return false;
 
+            Category category = CategoryMapper.ToEntity(categoryDTO);
+
             await _categoryRepository.UpdateAsync(category);
+
             return true;
         }
 
         public async Task<bool> DeleteCategoryAsync(int id)
         {
-
             if (id < 0) return false;
 
             await _categoryRepository.DeleteAsync(id);
+
             return true;
         }
     }
