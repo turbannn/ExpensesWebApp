@@ -6,8 +6,6 @@ using ExpenseWebAppDAL.Data;
 using ExpenseWebAppDAL.Entities;
 using ExpenseWebAppDAL.Interfaces;
 using ExpenseWebAppDAL.Repositories;
-using Serilog.Extensions.Logging;
-using Serilog;
 
 namespace ExpenseWebApp
 {

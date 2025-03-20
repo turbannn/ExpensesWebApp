@@ -60,12 +60,11 @@ namespace ExpenseWebAppDAL.Repositories
 
         public async Task UpdateAsync(Expense entity)
         {
-            var expense = await _context.Expenses.SingleAsync(e => e.Id == entity.Id);
-
-            expense.Value = entity.Value;
-            expense.Description = entity.Description;
-
-            await _context.SaveChangesAsync();
+            await _context.Expenses
+                .Where(e => e.Id == entity.Id)
+                .ExecuteUpdateAsync(s => 
+                s.SetProperty(e => e.Value, entity.Value)
+                .SetProperty(e => e.Description, entity.Description));
         }
 
         public async Task UpdateWithCategoryAsync(Expense entity, int categoryId)
@@ -109,12 +108,7 @@ namespace ExpenseWebAppDAL.Repositories
 
         public async Task DeleteAsync(int id)
         {
-            var expense = await _context.Expenses.FindAsync(id);
-            if (expense != null)
-            {
-                _context.Expenses.Remove(expense);
-                await _context.SaveChangesAsync();
-            }
+            await _context.Expenses.Where(e => e.Id == id).ExecuteDeleteAsync();
         }
     }
 }

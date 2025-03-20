@@ -34,17 +34,13 @@ namespace ExpenseWebAppDAL.Repositories
         }
         public async Task UpdateAsync(Category category)
         {
-            _context.Categories.Update(category);
-            await _context.SaveChangesAsync();
+            await _context.Categories.Where(c => c.Id == category.Id)
+                .ExecuteUpdateAsync(s => 
+                s.SetProperty(c => c.Name, category.Name)); 
         }
         public async Task DeleteAsync(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
-            if (category != null)
-            {
-                _context.Categories.Remove(category);
-                await _context.SaveChangesAsync();
-            }
+            await _context.Categories.Where(c => c.Id == id).ExecuteDeleteAsync();
         }
     }
 }
