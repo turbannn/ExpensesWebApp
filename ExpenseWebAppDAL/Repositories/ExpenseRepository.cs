@@ -49,6 +49,12 @@ namespace ExpenseWebAppDAL.Repositories
 
             await _context.Expenses.AddAsync(entity);
 
+            var tracked = _context.ChangeTracker.Entries();
+            foreach (var entry in tracked)
+            {
+                Console.WriteLine(entry.Entity + " " + entry.State);
+            }
+
             await _context.SaveChangesAsync();
         }
 
