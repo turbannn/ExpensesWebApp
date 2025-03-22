@@ -1,14 +1,8 @@
 ﻿using ExpenseWebAppDAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ExpenseWebAppDAL.Data.Configuration
+namespace ExpenseWebAppDAL.Configuration
 {
     internal class CategoryConfiguration : IEntityTypeConfiguration<Category>
     {
@@ -21,6 +15,8 @@ namespace ExpenseWebAppDAL.Data.Configuration
             builder.Property(c => c.Name).IsRequired().HasMaxLength(35);
 
             builder.HasMany(c => c.Expenses).WithMany(e => e.CategoriesList);
+
+            builder.HasQueryFilter(c => c.IsDeleted == false);
         }
     }
 }

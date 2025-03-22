@@ -40,7 +40,11 @@ namespace ExpenseWebAppDAL.Repositories
         }
         public async Task DeleteAsync(int id)
         {
-            await _context.Categories.Where(c => c.Id == id).ExecuteDeleteAsync();
+            await _context.Categories
+                .Where(c => c.Id == id)
+                .ExecuteUpdateAsync(s =>
+                s.SetProperty(e => e.IsDeleted, true)
+                .SetProperty(e => e.DeletedAt, DateTimeOffset.Now.AddHours(1)));
         }
     }
 }

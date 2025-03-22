@@ -1,11 +1,6 @@
 ﻿using ExpenseWebAppDAL.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using ExpenseWebAppDAL.Data.Configuration;
+using ExpenseWebAppDAL.Configuration;
 
 namespace ExpenseWebAppDAL.Data
 {
@@ -17,12 +12,13 @@ namespace ExpenseWebAppDAL.Data
         public WebAppContext(DbContextOptions options) : base(options)
         {
         }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new ExpenseConfiguration());
 
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

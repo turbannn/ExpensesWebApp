@@ -108,7 +108,11 @@ namespace ExpenseWebAppDAL.Repositories
 
         public async Task DeleteAsync(int id)
         {
-            await _context.Expenses.Where(e => e.Id == id).ExecuteDeleteAsync();
+            await _context.Expenses
+            .Where(e => e.Id == id)
+            .ExecuteUpdateAsync(s =>
+            s.SetProperty(e => e.IsDeleted, true)
+            .SetProperty(e => e.DeletedAt, DateTimeOffset.Now.AddHours(1)));
         }
     }
 }
