@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ExpenseWebAppDAL.Configuration;
 using ExpenseWebAppDAL.Interfaces;
+using ExpenseWebAppDAL.Interceptors;
 
 namespace ExpenseWebAppDAL.Data
 {
@@ -28,8 +29,15 @@ namespace ExpenseWebAppDAL.Data
 
             return base.SaveChangesAsync(cancellationToken);
         }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.AddInterceptors(new SqlLoggerInterceptor());
+
+            base.OnConfiguring(optionsBuilder);
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             modelBuilder.ApplyConfiguration(new ExpenseConfiguration());
 
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());

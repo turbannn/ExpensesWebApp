@@ -18,9 +18,9 @@ namespace ExpenseWebApp.Controllers
             _expenseService = expenseService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var expenses = _expenseService.GetAllExpensesAsync().Result;
+            var expenses = await _expenseService.GetAllExpensesAsync();
 
             var totalExpenses = expenses.Sum(x => x.Value);
 
