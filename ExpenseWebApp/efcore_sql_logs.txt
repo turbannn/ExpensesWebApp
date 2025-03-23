@@ -1,0 +1,15 @@
+[2025-03-23 20:32:44] info: 23.03.2025 20:32:44.465 RelationalEventId.CommandExecuted[20101] (Microsoft.EntityFrameworkCore.Database.Command) 
+      Executed DbCommand (161ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT `e`.`Id`, `e`.`CreationDate`, `e`.`DeletedAt`, `e`.`Description`, `e`.`IsDeleted`, `e`.`Value`, `s`.`CategoriesListId`, `s`.`ExpensesId`, `s`.`Id`, `s`.`DeletedAt`, `s`.`IsDeleted`, `s`.`Name`
+      FROM `Expenses` AS `e`
+      LEFT JOIN (
+          SELECT `c`.`CategoriesListId`, `c`.`ExpensesId`, `c1`.`Id`, `c1`.`DeletedAt`, `c1`.`IsDeleted`, `c1`.`Name`
+          FROM `CategoryExpense` AS `c`
+          INNER JOIN (
+              SELECT `c0`.`Id`, `c0`.`DeletedAt`, `c0`.`IsDeleted`, `c0`.`Name`
+              FROM `Categories` AS `c0`
+              WHERE NOT (`c0`.`IsDeleted`)
+          ) AS `c1` ON `c`.`CategoriesListId` = `c1`.`Id`
+      ) AS `s` ON `e`.`Id` = `s`.`ExpensesId`
+      WHERE NOT (`e`.`IsDeleted`)
+      ORDER BY `e`.`Id`, `s`.`CategoriesListId`, `s`.`ExpensesId`
