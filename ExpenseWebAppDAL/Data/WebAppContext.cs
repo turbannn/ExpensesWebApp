@@ -8,7 +8,7 @@ namespace ExpenseWebAppDAL.Data
 {
     public class WebAppContext : DbContext
     {
-        private static readonly string LogFilePath = "efcore_sql_logs.txt";
+        private static readonly string LogFilePath = "ef_sql_logs.txt";
         public DbSet<Expense> Expenses { get; set; } = null!;
         public DbSet<Category> Categories { get; set; } = null!;
 
@@ -32,7 +32,7 @@ namespace ExpenseWebAppDAL.Data
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.LogTo(AppendLogToFile, LogLevel.Information);
+            optionsBuilder.LogTo(AppendLogToFile, LogLevel.Debug);
 
             base.OnConfiguring(optionsBuilder);
         }
@@ -50,7 +50,9 @@ namespace ExpenseWebAppDAL.Data
             {
                 using (var writer = new StreamWriter(LogFilePath, true))
                 {
+                    writer.WriteLine("======================================================");
                     writer.WriteLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {logMessage}");
+                    writer.WriteLine("======================================================");
                 }
             }
             catch (Exception ex)
