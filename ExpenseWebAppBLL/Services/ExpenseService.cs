@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ExpenseWebAppBLL.DTOs;
+using ExpenseWebAppBLL.Interfaces;
 using ExpenseWebAppBLL.Mappers;
-using ExpenseWebAppDAL.Entities;
 using ExpenseWebAppDAL.Interfaces;
 
 namespace ExpenseWebAppBLL.Services
@@ -28,8 +28,8 @@ namespace ExpenseWebAppBLL.Services
 
             foreach (var e in expenses)
             {
-
-                expenseDTOs.Add(_expenseMapper.ToDTO(e));
+                if(_expenseMapper.ToDTO(e) is ExpenseDTO eDTO)
+                    expenseDTOs.Add(eDTO);
             }
 
             return expenseDTOs;

@@ -29,7 +29,8 @@ namespace ExpenseWebAppBLL.Services
             var categoryDTOs = new List<ICategoryTransferObject>();
             foreach (var c in categories)
             {
-                categoryDTOs.Add(_categoryMapper.ToDTO(c));
+                if(_categoryMapper.ToDTO(c) is CategoryDTO cDTO)
+                    categoryDTOs.Add(cDTO);
             }
 
             return categoryDTOs;

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExpenseWebAppDAL.Interfaces
+namespace ExpenseWebAppBLL.Interfaces
 {
     public interface IExpenseTransferObject : ITransferObject
     {
