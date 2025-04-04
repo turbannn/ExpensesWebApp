@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ExpenseWebAppBLL.Interfaces;
 
-namespace ExpenseWebAppBLL.DTOs;
+namespace ExpenseWebAppBLL.DTOs.CategoryDTOs;
 
 public class CategoryDTO : BaseDataTransferObject, ICategoryTransferObject
 {

@@ -1,4 +1,4 @@
-﻿using ExpenseWebAppBLL.DTOs;
+﻿using ExpenseWebAppBLL.DTOs.CategoryDTOs;
 using ExpenseWebAppBLL.Interfaces;
 using ExpenseWebAppBLL.Mappers;
 using ExpenseWebAppDAL.Entities;
@@ -29,7 +29,7 @@ namespace ExpenseWebAppBLL.Services
             var categoryDTOs = new List<ICategoryTransferObject>();
             foreach (var c in categories)
             {
-                if(_categoryMapper.ToDTO(c) is CategoryDTO cDTO)
+                if(_categoryMapper.ToReadDTO(c) is CategoryDTO cDTO)
                     categoryDTOs.Add(cDTO);
             }
 
@@ -43,7 +43,7 @@ namespace ExpenseWebAppBLL.Services
 
             if (category == null) return null;
 
-            var categoryDTO = _categoryMapper.ToDTO(category);
+            var categoryDTO = _categoryMapper.ToReadDTO(category);
 
             return categoryDTO;
         }

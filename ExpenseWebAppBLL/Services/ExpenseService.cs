@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ExpenseWebAppBLL.DTOs;
+using ExpenseWebAppBLL.DTOs.ExpenseDTOs;
 using ExpenseWebAppBLL.Interfaces;
 using ExpenseWebAppBLL.Mappers;
 using ExpenseWebAppDAL.Interfaces;
@@ -24,17 +24,17 @@ namespace ExpenseWebAppBLL.Services
         {
             var expenses = await _expenseRepository.GetAllAsync();
 
-            List<IExpenseTransferObject> expenseDTOs = new List<IExpenseTransferObject>();
+            List<ExpenseReadDTO> expenseDTOs = new List<ExpenseReadDTO>();
 
             foreach (var e in expenses)
             {
-                if(_expenseMapper.ToDTO(e) is ExpenseDTO eDTO)
-                    expenseDTOs.Add(eDTO);
+                if(_expenseMapper.ToReadDTO(e) is ExpenseReadDTO rDTO)
+                    expenseDTOs.Add(rDTO);
             }
 
             return expenseDTOs;
         }
-        public async Task<IExpenseTransferObject?> GetExpenseByIdAsync(int id)
+        public async Task<IExpenseTransferObject?> GetReadExpenseByIdAsync(int id)
         {
             if (id < 0) return null;
 
@@ -42,12 +42,25 @@ namespace ExpenseWebAppBLL.Services
 
             if (expense == null) return null;
 
-            var expenseDTO = _expenseMapper.ToDTO(expense);
+            var expenseDTO = _expenseMapper.ToReadDTO(expense);
 
             return expenseDTO;
         }
 
-        public async Task<bool> AddExpenseAsync(IExpenseTransferObject expenseDTO)
+        public async Task<IExpenseTransferObject?> GetUpdateExpenseByIdAsync(int id)
+        {
+            if (id < 0) return null;
+
+            var expense = await _expenseRepository.GetByIdAsync(id);
+
+            if (expense == null) return null;
+
+            var expenseDTO = _expenseMapper.ToUpdateDTO(expense);
+
+            return expenseDTO;
+        }
+
+        public async Task<bool> AddExpenseAsync(ExpenseCreateDTO expenseDTO)
         {
             if (expenseDTO.Id < 0 || expenseDTO.Value < 0 || string.IsNullOrEmpty(expenseDTO.Description))
                 return false;
@@ -65,7 +78,7 @@ namespace ExpenseWebAppBLL.Services
             return true;
         }
 
-        public async Task<bool> UpdateExpenseAsync(IExpenseTransferObject expenseDTO)
+        public async Task<bool> UpdateExpenseAsync(ExpenseUpdateDTO expenseDTO)
         {
 
             if (expenseDTO.Id < 0 || expenseDTO.Value < 0 || string.IsNullOrEmpty(expenseDTO.Description))

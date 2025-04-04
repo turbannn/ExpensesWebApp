@@ -4,8 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebAppTest.Controllers;
 using ExpenseWebAppDAL.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.JSInterop;
-using ExpenseWebAppBLL.DTOs;
+using ExpenseWebAppBLL.DTOs.CategoryDTOs;
 
 namespace ExpenseWebApp.Controllers
 {

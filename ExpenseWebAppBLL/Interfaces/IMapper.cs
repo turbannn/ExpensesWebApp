@@ -9,8 +9,7 @@ namespace ExpenseWebAppBLL.Interfaces
 {
     public interface IMapper<DTO, Entity> where DTO: ITransferObject
     {
-        DTO ToDTO(Entity entity);
-
-        Entity ToEntity(DTO DTO);
+        DTO ToReadDTO(Entity entity);
+        Entity ToEntity(DTO dto);
     }
 }

@@ -10,6 +10,5 @@ namespace ExpenseWebAppBLL.Interfaces
     public interface ICategoryTransferObject : ITransferObject
     {
         string Name { get; set; }
-
     }
 }

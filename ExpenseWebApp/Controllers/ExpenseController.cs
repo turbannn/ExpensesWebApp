@@ -1,5 +1,5 @@
 ﻿using ExpenseWebApp.Models;
-using ExpenseWebAppBLL.DTOs;
+using ExpenseWebAppBLL.DTOs.ExpenseDTOs;
 using ExpenseWebAppBLL.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -30,9 +30,8 @@ namespace ExpenseWebApp.Controllers
         }
 
         [HttpPost("/Expense/CreateExpense")]
-        public IActionResult CreateExpense([FromBody] ExpenseDTO expenseDTO)
+        public IActionResult CreateExpense([FromBody] ExpenseCreateDTO expenseDTO)
         {
-
             if (!_expenseService.AddExpenseAsync(expenseDTO).Result) //async refactor
                 return BadRequest("Data not sent");
 
@@ -46,7 +45,7 @@ namespace ExpenseWebApp.Controllers
 
         //[HttpPut]
         [HttpPut("/Expense/EditExpense/{id}")]
-        public async Task<IActionResult> EditExpense([FromBody] ExpenseDTO expenseDTO)
+        public async Task<IActionResult> EditExpense([FromBody] ExpenseUpdateDTO expenseDTO)
         {
             var updateTaskResult = await _expenseService.UpdateExpenseAsync(expenseDTO);
 
@@ -59,7 +58,7 @@ namespace ExpenseWebApp.Controllers
         [Route("/Expense/EditExpense/{id}")]
         public async Task<IActionResult> EditExpense(int id)
         {
-            var expense = await _expenseService.GetExpenseByIdAsync(id);
+            var expense = await _expenseService.GetUpdateExpenseByIdAsync(id);
 
             if (expense == null) return NotFound();
 
@@ -69,7 +68,7 @@ namespace ExpenseWebApp.Controllers
         [HttpGet("/Expense/GetExpense/{id}")]
         public IActionResult GetExpense(int id)
         {
-            var expense = _expenseService.GetExpenseByIdAsync(id).Result;
+            var expense = _expenseService.GetReadExpenseByIdAsync(id).Result;
 
             if (expense == null)
                 return NotFound(new { success = false, message = "Expense not found" });
