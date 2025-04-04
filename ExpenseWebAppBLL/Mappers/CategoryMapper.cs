@@ -4,9 +4,9 @@ using ExpenseWebAppDAL.Entities;
 
 namespace ExpenseWebAppBLL.Mappers
 {
-    internal static class CategoryMapper
+    internal class CategoryMapper : IMapper<ICategoryTransferObject, Category>
     {
-        internal static CategoryDTO ToDTO(Category category)
+        public ICategoryTransferObject ToDTO(Category category)
         {
             return new CategoryDTO()
             {
@@ -15,7 +15,7 @@ namespace ExpenseWebAppBLL.Mappers
             };
         }
 
-        internal static Category ToEntity(ICategoryTransferObject categoryDTO)
+        public Category ToEntity(ICategoryTransferObject categoryDTO)
         {
             return new Category
             {

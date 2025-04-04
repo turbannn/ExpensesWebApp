@@ -2,12 +2,13 @@
 using ExpenseWebAppDAL.Entities;
 using ExpenseWebAppDAL.Interfaces;
 using System.Text;
+using ExpenseWebAppBLL.Interfaces;
 
 namespace ExpenseWebAppBLL.Mappers
 {
-    internal static class ExpenseMapper
+    internal class ExpenseMapper : IMapper<IExpenseTransferObject, Expense>
     {
-        internal static ExpenseDTO ToDTO(Expense expense)
+        public IExpenseTransferObject ToDTO(Expense expense)
         {
             StringBuilder str = new StringBuilder();
             if (expense.CategoriesList != null)
@@ -29,7 +30,7 @@ namespace ExpenseWebAppBLL.Mappers
             };
         }
 
-        internal static Expense ToEntity(IExpenseTransferObject expenseDTO)
+        public Expense ToEntity(IExpenseTransferObject expenseDTO)
         {
             return new Expense
             {

@@ -35,8 +35,8 @@ namespace ExpenseWebAppDAL.Repositories
         public async Task UpdateAsync(Category category)
         {
             await _context.Categories.Where(c => c.Id == category.Id)
-                .ExecuteUpdateAsync(s => 
-                s.SetProperty(c => c.Name, category.Name)); 
+                .ExecuteUpdateAsync(s => s
+                    .SetProperty(c => c.Name, category.Name)); 
         }
         public async Task DeleteAsync(int id)
         {

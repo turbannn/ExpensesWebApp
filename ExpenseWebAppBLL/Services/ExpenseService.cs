@@ -14,21 +14,22 @@ namespace ExpenseWebAppBLL.Services
     public class ExpenseService
     {
         private readonly IExpenseRepository _expenseRepository;
-
+        private readonly ExpenseMapper _expenseMapper;
         public ExpenseService(IExpenseRepository expenseRepository)
         {
             _expenseRepository = expenseRepository;
+            _expenseMapper = new ExpenseMapper();
         }
         public async Task<IEnumerable<IExpenseTransferObject>> GetAllExpensesAsync()
         {
             var expenses = await _expenseRepository.GetAllAsync();
 
-            List<ExpenseDTO> expenseDTOs = new List<ExpenseDTO>();
+            List<IExpenseTransferObject> expenseDTOs = new List<IExpenseTransferObject>();
 
             foreach (var e in expenses)
             {
 
-                expenseDTOs.Add(ExpenseMapper.ToDTO(e));
+                expenseDTOs.Add(_expenseMapper.ToDTO(e));
             }
 
             return expenseDTOs;
@@ -41,7 +42,7 @@ namespace ExpenseWebAppBLL.Services
 
             if (expense == null) return null;
 
-            ExpenseDTO expenseDTO = ExpenseMapper.ToDTO(expense);
+            var expenseDTO = _expenseMapper.ToDTO(expense);
 
             return expenseDTO;
         }
@@ -51,7 +52,7 @@ namespace ExpenseWebAppBLL.Services
             if (expenseDTO.Id < 0 || expenseDTO.Value < 0 || string.IsNullOrEmpty(expenseDTO.Description))
                 return false;
 
-            var expense = ExpenseMapper.ToEntity(expenseDTO);
+            var expense = _expenseMapper.ToEntity(expenseDTO);
 
             if(expenseDTO.CategoryId != -1)
             {
@@ -70,7 +71,7 @@ namespace ExpenseWebAppBLL.Services
             if (expenseDTO.Id < 0 || expenseDTO.Value < 0 || string.IsNullOrEmpty(expenseDTO.Description))
                 return false;
 
-            var expense = ExpenseMapper.ToEntity(expenseDTO);
+            var expense = _expenseMapper.ToEntity(expenseDTO);
 
             if (expenseDTO.CategoryId != -1)
             {

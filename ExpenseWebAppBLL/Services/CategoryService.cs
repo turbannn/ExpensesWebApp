@@ -15,19 +15,21 @@ namespace ExpenseWebAppBLL.Services
     public class CategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
+        private readonly CategoryMapper _categoryMapper;
 
         public CategoryService(ICategoryRepository repository)
         {
             _categoryRepository = repository;
+            _categoryMapper = new CategoryMapper();
         }
         public async Task<IEnumerable<ICategoryTransferObject>?> GetAllCategoriesAsync()
         {
             var categories = await _categoryRepository.GetAllAsync();
 
-            List<CategoryDTO> categoryDTOs = new List<CategoryDTO>();
+            var categoryDTOs = new List<ICategoryTransferObject>();
             foreach (var c in categories)
             {
-                categoryDTOs.Add(CategoryMapper.ToDTO(c));
+                categoryDTOs.Add(_categoryMapper.ToDTO(c));
             }
 
             return categoryDTOs;
@@ -40,7 +42,7 @@ namespace ExpenseWebAppBLL.Services
 
             if (category == null) return null;
 
-            CategoryDTO categoryDTO = CategoryMapper.ToDTO(category);
+            var categoryDTO = _categoryMapper.ToDTO(category);
 
             return categoryDTO;
         }
@@ -50,7 +52,7 @@ namespace ExpenseWebAppBLL.Services
             if (categoryDTO.Id < 0 || string.IsNullOrEmpty(categoryDTO.Name))
                 return false;
 
-            Category category = CategoryMapper.ToEntity(categoryDTO);
+            var category = _categoryMapper.ToEntity(categoryDTO);
 
             await _categoryRepository.AddAsync(category);
 
@@ -62,7 +64,7 @@ namespace ExpenseWebAppBLL.Services
             if (categoryDTO.Id < 0 || string.IsNullOrEmpty(categoryDTO.Name))
                 return false;
 
-            Category category = CategoryMapper.ToEntity(categoryDTO);
+            var category = _categoryMapper.ToEntity(categoryDTO);
 
             await _categoryRepository.UpdateAsync(category);
 

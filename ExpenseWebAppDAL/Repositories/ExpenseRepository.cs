@@ -21,12 +21,17 @@ namespace ExpenseWebAppDAL.Repositories
 
         public async Task<IEnumerable<Expense>> GetAllAsync()
         {
-            return await _context.Expenses.Include(e => e.CategoriesList).ToListAsync();
+            return await _context.Expenses
+                .Include(e => e.CategoriesList)
+                .ToListAsync();
         }
 
         public async Task<Expense?> GetByIdAsync(int id)
         {
-            return await _context.Expenses.AsNoTracking().Include(e => e.CategoriesList).FirstOrDefaultAsync(e => e.Id == id);
+            return await _context.Expenses
+                .AsNoTracking()
+                .Include(e => e.CategoriesList)
+                .FirstOrDefaultAsync(e => e.Id == id);
         }
 
         public async Task AddAsync(Expense entityToAdd)
