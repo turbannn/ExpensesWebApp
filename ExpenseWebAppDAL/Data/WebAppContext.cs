@@ -57,7 +57,7 @@ namespace ExpenseWebAppDAL.Data
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Ошибка записи в лог: {ex.Message}");
+                Console.WriteLine($"Logging error: {ex.Message}");
             }
         }
     }

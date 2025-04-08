@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FluentValidation;
 
 namespace ExpenseWebAppBLL.Services
 {
@@ -16,10 +17,12 @@ namespace ExpenseWebAppBLL.Services
     {
         private readonly ICategoryRepository _categoryRepository;
         private readonly CategoryMapper _categoryMapper;
+        private readonly IValidator<ICategoryTransferObject> _validator;
 
-        public CategoryService(ICategoryRepository repository)
+        public CategoryService(ICategoryRepository repository, IValidator<ICategoryTransferObject> validator)
         {
             _categoryRepository = repository;
+            _validator = validator;
             _categoryMapper = new CategoryMapper();
         }
         public async Task<IEnumerable<ICategoryTransferObject>?> GetAllCategoriesAsync()
@@ -50,8 +53,8 @@ namespace ExpenseWebAppBLL.Services
 
         public async Task<bool> AddCategoryAsync(ICategoryTransferObject categoryDTO)
         {
-            if (categoryDTO.Id < 0 || string.IsNullOrEmpty(categoryDTO.Name))
-                return false;
+            var validationResult = await _validator.ValidateAsync(categoryDTO);
+            if (!validationResult.IsValid) return false;
 
             var category = _categoryMapper.ToEntity(categoryDTO);
 
@@ -62,8 +65,8 @@ namespace ExpenseWebAppBLL.Services
 
         public async Task<bool> UpdateCategoryAsync(ICategoryTransferObject categoryDTO)
         {
-            if (categoryDTO.Id < 0 || string.IsNullOrEmpty(categoryDTO.Name))
-                return false;
+            var validationResult = await _validator.ValidateAsync(categoryDTO);
+            if (!validationResult.IsValid) return false;
 
             var category = _categoryMapper.ToEntity(categoryDTO);
 

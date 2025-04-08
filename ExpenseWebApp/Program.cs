@@ -1,11 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using System.Data.Common;
-using ExpenseWebApp.Models;
+using System.Reflection;
 using ExpenseWebAppBLL.Services;
 using ExpenseWebAppDAL.Data;
-using ExpenseWebAppDAL.Entities;
 using ExpenseWebAppDAL.Interfaces;
 using ExpenseWebAppDAL.Repositories;
+using FluentValidation;
 
 namespace ExpenseWebApp
 {
@@ -17,6 +16,9 @@ namespace ExpenseWebApp
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            // Validators
+            builder.Services.AddValidatorsFromAssembly(Assembly.Load("ExpenseWebAppBLL"));
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 

@@ -30,9 +30,11 @@ namespace ExpenseWebApp.Controllers
         }
 
         [HttpPost("/Expense/CreateExpense")]
-        public IActionResult CreateExpense([FromBody] ExpenseCreateDTO expenseDTO)
+        public async Task<IActionResult> CreateExpense([FromBody] ExpenseCreateDTO expenseDTO)
         {
-            if (!_expenseService.AddExpenseAsync(expenseDTO).Result) //async refactor
+            var createTaskResult = await _expenseService.AddExpenseAsync(expenseDTO);
+
+            if (!createTaskResult)
                 return BadRequest("Data not sent");
 
             return Json(new { success = true, redirectUrl = Url.Action("Index") });
@@ -66,9 +68,9 @@ namespace ExpenseWebApp.Controllers
         }
 
         [HttpGet("/Expense/GetExpense/{id}")]
-        public IActionResult GetExpense(int id)
+        public async Task<IActionResult> GetExpense(int id)
         {
-            var expense = _expenseService.GetReadExpenseByIdAsync(id).Result;
+            var expense = await _expenseService.GetReadExpenseByIdAsync(id);
 
             if (expense == null)
                 return NotFound(new { success = false, message = "Expense not found" });
@@ -77,9 +79,11 @@ namespace ExpenseWebApp.Controllers
         }
 
         [HttpDelete("Expense/DeleteExpense/{id}")]
-        public IActionResult DeleteExpense(int id)
+        public async Task<IActionResult> DeleteExpense(int id)
         {
-            if (!_expenseService.DeleteExpenseAsync(id).Result)
+            var deleteTaskResult = await _expenseService.DeleteExpenseAsync(id);
+
+            if (!deleteTaskResult)
                 return BadRequest("Invalid data");
 
             return Json(new { success = true, redirectUrl = Url.Action("Index") });

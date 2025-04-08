@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ExpenseWebAppBLL.DTOs.ExpenseDTOs;
+﻿using ExpenseWebAppBLL.DTOs.ExpenseDTOs;
 using ExpenseWebAppBLL.Interfaces;
 using ExpenseWebAppBLL.Mappers;
 using ExpenseWebAppDAL.Interfaces;
+using FluentValidation;
 
 namespace ExpenseWebAppBLL.Services
 {
@@ -15,9 +11,11 @@ namespace ExpenseWebAppBLL.Services
     {
         private readonly IExpenseRepository _expenseRepository;
         private readonly ExpenseMapper _expenseMapper;
-        public ExpenseService(IExpenseRepository expenseRepository)
+        private readonly IValidator<IExpenseTransferObject> _validator;
+        public ExpenseService(IExpenseRepository expenseRepository, IValidator<IExpenseTransferObject> expenseValidator)
         {
             _expenseRepository = expenseRepository;
+            _validator = expenseValidator;
             _expenseMapper = new ExpenseMapper();
         }
         public async Task<IEnumerable<IExpenseTransferObject>> GetAllExpensesAsync()
@@ -29,7 +27,7 @@ namespace ExpenseWebAppBLL.Services
             foreach (var e in expenses)
             {
                 if(_expenseMapper.ToReadDTO(e) is ExpenseReadDTO rDTO)
-                    expenseDTOs.Add(rDTO);
+                    expenseDTOs.Add(rDTO); //really bad code, need refactor :)
             }
 
             return expenseDTOs;
@@ -42,7 +40,7 @@ namespace ExpenseWebAppBLL.Services
 
             if (expense == null) return null;
 
-            var expenseDTO = _expenseMapper.ToReadDTO(expense);
+            var expenseDTO = _expenseMapper.ToReadDTO(expense); //+ :)
 
             return expenseDTO;
         }
@@ -55,15 +53,15 @@ namespace ExpenseWebAppBLL.Services
 
             if (expense == null) return null;
 
-            var expenseDTO = _expenseMapper.ToUpdateDTO(expense);
+            var expenseDTO = _expenseMapper.ToUpdateDTO(expense); //+ :)
 
             return expenseDTO;
         }
 
         public async Task<bool> AddExpenseAsync(ExpenseCreateDTO expenseDTO)
         {
-            if (expenseDTO.Id < 0 || expenseDTO.Value < 0 || string.IsNullOrEmpty(expenseDTO.Description))
-                return false;
+            var validationResult = await _validator.ValidateAsync(expenseDTO);
+            if (!validationResult.IsValid) return false;
 
             var expense = _expenseMapper.ToEntity(expenseDTO);
 
@@ -80,9 +78,10 @@ namespace ExpenseWebAppBLL.Services
 
         public async Task<bool> UpdateExpenseAsync(ExpenseUpdateDTO expenseDTO)
         {
+            var validationResult = await _validator.ValidateAsync(expenseDTO);
 
-            if (expenseDTO.Id < 0 || expenseDTO.Value < 0 || string.IsNullOrEmpty(expenseDTO.Description))
-                return false;
+            if (!validationResult.IsValid) return false;
+
 
             var expense = _expenseMapper.ToEntity(expenseDTO);
 
