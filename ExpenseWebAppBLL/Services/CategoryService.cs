@@ -1,14 +1,8 @@
 ﻿using ExpenseWebAppBLL.DTOs.CategoryDTOs;
 using ExpenseWebAppBLL.Interfaces;
-using ExpenseWebAppBLL.Mappers;
 using ExpenseWebAppDAL.Entities;
 using ExpenseWebAppDAL.Interfaces;
-using ExpenseWebAppDAL.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AutoMapper;
 using FluentValidation;
 
 namespace ExpenseWebAppBLL.Services
@@ -16,29 +10,26 @@ namespace ExpenseWebAppBLL.Services
     public class CategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
-        private readonly CategoryMapper _categoryMapper;
         private readonly IValidator<ICategoryTransferObject> _validator;
+        private readonly IMapper _mapper;
 
-        public CategoryService(ICategoryRepository repository, IValidator<ICategoryTransferObject> validator)
+        public CategoryService(ICategoryRepository repository,
+            IValidator<ICategoryTransferObject> validator,
+            IMapper mapper)
         {
             _categoryRepository = repository;
             _validator = validator;
-            _categoryMapper = new CategoryMapper();
+            _mapper = mapper;
         }
-        public async Task<IEnumerable<ICategoryTransferObject>?> GetAllCategoriesAsync()
+        public async Task<IEnumerable<CategoryDTO>?> GetAllCategoriesAsync()
         {
             var categories = await _categoryRepository.GetAllAsync();
 
-            var categoryDTOs = new List<ICategoryTransferObject>();
-            foreach (var c in categories)
-            {
-                if(_categoryMapper.ToReadDTO(c) is CategoryDTO cDTO)
-                    categoryDTOs.Add(cDTO);
-            }
+            var categoryDTOs = _mapper.Map<List<CategoryDTO>>(categories);
 
             return categoryDTOs;
         }
-        public async Task<ICategoryTransferObject?> GetCategoryByIdAsync(int id)
+        public async Task<CategoryDTO?> GetCategoryByIdAsync(int id)
         {
             if (id < 0) return null;
 
@@ -46,29 +37,29 @@ namespace ExpenseWebAppBLL.Services
 
             if (category == null) return null;
 
-            var categoryDTO = _categoryMapper.ToReadDTO(category);
+            var categoryDTO = _mapper.Map<CategoryDTO>(category);
 
             return categoryDTO;
         }
 
-        public async Task<bool> AddCategoryAsync(ICategoryTransferObject categoryDTO)
+        public async Task<bool> AddCategoryAsync(CategoryDTO categoryDTO)
         {
             var validationResult = await _validator.ValidateAsync(categoryDTO);
             if (!validationResult.IsValid) return false;
 
-            var category = _categoryMapper.ToEntity(categoryDTO);
+            var category = _mapper.Map<Category>(categoryDTO);
 
             await _categoryRepository.AddAsync(category);
 
             return true;
         }
 
-        public async Task<bool> UpdateCategoryAsync(ICategoryTransferObject categoryDTO)
+        public async Task<bool> UpdateCategoryAsync(CategoryDTO categoryDTO)
         {
             var validationResult = await _validator.ValidateAsync(categoryDTO);
             if (!validationResult.IsValid) return false;
 
-            var category = _categoryMapper.ToEntity(categoryDTO);
+            var category = _mapper.Map<Category>(categoryDTO);
 
             await _categoryRepository.UpdateAsync(category);
 

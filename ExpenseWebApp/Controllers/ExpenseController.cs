@@ -60,7 +60,7 @@ namespace ExpenseWebApp.Controllers
         [Route("/Expense/EditExpense/{id}")]
         public async Task<IActionResult> EditExpense(int id)
         {
-            var expense = await _expenseService.GetUpdateExpenseByIdAsync(id);
+            var expense = await _expenseService.GetExpenseByIdAsync(id);
 
             if (expense == null) return NotFound();
 
@@ -70,7 +70,7 @@ namespace ExpenseWebApp.Controllers
         [HttpGet("/Expense/GetExpense/{id}")]
         public async Task<IActionResult> GetExpense(int id)
         {
-            var expense = await _expenseService.GetReadExpenseByIdAsync(id);
+            var expense = await _expenseService.GetExpenseByIdAsync(id);
 
             if (expense == null)
                 return NotFound(new { success = false, message = "Expense not found" });

@@ -20,6 +20,9 @@ namespace ExpenseWebApp
             // Validators
             builder.Services.AddValidatorsFromAssembly(Assembly.Load("ExpenseWebAppBLL"));
 
+            // Mappers
+            builder.Services.AddAutoMapper(Assembly.Load("ExpenseWebAppBLL"));
+
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
             //!!! VERSION TROUBLE 9.0.0-preview.1.24081.2 for Relational, Core and Tools || 9.0.0-preview.1 for Pomelo MySql !!!

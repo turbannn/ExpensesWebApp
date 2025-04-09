@@ -1,8 +1,9 @@
 ﻿using ExpenseWebAppBLL.DTOs.ExpenseDTOs;
 using ExpenseWebAppBLL.Interfaces;
-using ExpenseWebAppBLL.Mappers;
 using ExpenseWebAppDAL.Interfaces;
+using ExpenseWebAppDAL.Entities;
 using FluentValidation;
+using AutoMapper;
 
 namespace ExpenseWebAppBLL.Services
 {
@@ -10,50 +11,34 @@ namespace ExpenseWebAppBLL.Services
     public class ExpenseService
     {
         private readonly IExpenseRepository _expenseRepository;
-        private readonly ExpenseMapper _expenseMapper;
         private readonly IValidator<IExpenseTransferObject> _validator;
-        public ExpenseService(IExpenseRepository expenseRepository, IValidator<IExpenseTransferObject> expenseValidator)
+        private readonly IMapper _mapper;
+
+        public ExpenseService(IExpenseRepository expenseRepository,
+            IValidator<IExpenseTransferObject> expenseValidator,
+            IMapper mapper
+            )
         {
             _expenseRepository = expenseRepository;
             _validator = expenseValidator;
-            _expenseMapper = new ExpenseMapper();
+            _mapper = mapper;
         }
-        public async Task<IEnumerable<IExpenseTransferObject>> GetAllExpensesAsync()
+        public async Task<IEnumerable<ExpenseReadDTO>> GetAllExpensesAsync()
         {
             var expenses = await _expenseRepository.GetAllAsync();
 
-            List<ExpenseReadDTO> expenseDTOs = new List<ExpenseReadDTO>();
+            var expenseDtos = _mapper.Map<List<ExpenseReadDTO>>(expenses);
 
-            foreach (var e in expenses)
-            {
-                if(_expenseMapper.ToReadDTO(e) is ExpenseReadDTO rDTO)
-                    expenseDTOs.Add(rDTO); //really bad code, need refactor :)
-            }
-
-            return expenseDTOs;
+            return expenseDtos;
         }
-        public async Task<IExpenseTransferObject?> GetReadExpenseByIdAsync(int id)
+        public async Task<ExpenseReadDTO?> GetExpenseByIdAsync(int id)
         {
             if (id < 0) return null;
 
             var expense = await _expenseRepository.GetByIdAsync(id);
-
             if (expense == null) return null;
 
-            var expenseDTO = _expenseMapper.ToReadDTO(expense); //+ :)
-
-            return expenseDTO;
-        }
-
-        public async Task<IExpenseTransferObject?> GetUpdateExpenseByIdAsync(int id)
-        {
-            if (id < 0) return null;
-
-            var expense = await _expenseRepository.GetByIdAsync(id);
-
-            if (expense == null) return null;
-
-            var expenseDTO = _expenseMapper.ToUpdateDTO(expense); //+ :)
+            var expenseDTO = _mapper.Map<ExpenseReadDTO>(expense);
 
             return expenseDTO;
         }
@@ -63,7 +48,7 @@ namespace ExpenseWebAppBLL.Services
             var validationResult = await _validator.ValidateAsync(expenseDTO);
             if (!validationResult.IsValid) return false;
 
-            var expense = _expenseMapper.ToEntity(expenseDTO);
+            var expense = _mapper.Map<Expense>(expenseDTO);
 
             if(expenseDTO.CategoryId != -1)
             {
@@ -82,8 +67,7 @@ namespace ExpenseWebAppBLL.Services
 
             if (!validationResult.IsValid) return false;
 
-
-            var expense = _expenseMapper.ToEntity(expenseDTO);
+            var expense = _mapper.Map<Expense>(expenseDTO);
 
             if (expenseDTO.CategoryId != -1)
             {
