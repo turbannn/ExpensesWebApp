@@ -8,6 +8,9 @@ namespace ExpenseWebAppBLL.Validators
         public ExpenseDTOValidator()
         {
             //int
+            RuleFor(e => e.Id)
+                .GreaterThan(-1).WithMessage("Id is less than 0");
+
             RuleFor(e => e.Value)
                 .NotEmpty().WithMessage("Expense Value empty error")
                 .GreaterThan(0).WithMessage("Expense Value less than 0 error");
