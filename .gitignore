@@ -6,6 +6,10 @@
 #logs
 ef_sql_logs.txt
 
+#jsons
+appsettings.json
+appsettings.Development.json
+
 # User-specific files
 *.rsuser
 *.suo

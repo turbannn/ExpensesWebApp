@@ -13,8 +13,9 @@ namespace ExpenseWebAppDAL.Configuration
     {
         public void Configure(EntityTypeBuilder<RefreshToken> builder)
         {
-            builder.HasKey(c => c.Token);
+            builder.HasKey(c => c.Id);
 
+            builder.Property(rt => rt.Token).IsRequired();
             builder.Property(rt => rt.Expires).IsRequired();
             builder.Property(rt => rt.IsRevoked).IsRequired();
         }

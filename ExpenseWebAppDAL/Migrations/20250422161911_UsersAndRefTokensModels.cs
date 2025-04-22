@@ -35,7 +35,9 @@ namespace ExpenseWebAppDAL.Migrations
                 name: "RefreshTokens",
                 columns: table => new
                 {
-                    Token = table.Column<string>(type: "varchar(255)", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Token = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Expires = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     IsRevoked = table.Column<bool>(type: "tinyint(1)", nullable: false),
@@ -43,7 +45,7 @@ namespace ExpenseWebAppDAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RefreshTokens", x => x.Token);
+                    table.PrimaryKey("PK_RefreshTokens", x => x.Id);
                     table.ForeignKey(
                         name: "FK_RefreshTokens_Users_UserId",
                         column: x => x.UserId,

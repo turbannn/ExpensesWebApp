@@ -1,12 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ExpenseWebAppDAL.Data;
+﻿using ExpenseWebAppDAL.Data;
 using ExpenseWebAppDAL.Entities;
 using ExpenseWebAppDAL.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseWebAppDAL.Repositories
 {
@@ -22,6 +17,7 @@ namespace ExpenseWebAppDAL.Repositories
         public async Task<IEnumerable<Expense>> GetAllAsync()
         {
             return await _context.Expenses
+                .AsNoTracking()
                 .Include(e => e.CategoriesList)
                 .ToListAsync();
         }
@@ -67,9 +63,9 @@ namespace ExpenseWebAppDAL.Repositories
         {
             await _context.Expenses
                 .Where(e => e.Id == entity.Id)
-                .ExecuteUpdateAsync(s => 
-                s.SetProperty(e => e.Value, entity.Value)
-                .SetProperty(e => e.Description, entity.Description));
+                .ExecuteUpdateAsync(s => s
+                    .SetProperty(e => e.Value, entity.Value)
+                    .SetProperty(e => e.Description, entity.Description));
         }
 
         public async Task UpdateWithCategoryAsync(Expense entity, int categoryId)

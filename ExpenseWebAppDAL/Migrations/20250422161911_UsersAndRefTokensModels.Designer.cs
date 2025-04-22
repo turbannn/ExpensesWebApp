@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExpenseWebAppDAL.Migrations
 {
     [DbContext(typeof(WebAppContext))]
-    [Migration("20250422152155_UsersAndRefTokensModels")]
+    [Migration("20250422161911_UsersAndRefTokensModels")]
     partial class UsersAndRefTokensModels
     {
         /// <inheritdoc />
@@ -110,8 +110,11 @@ namespace ExpenseWebAppDAL.Migrations
 
             modelBuilder.Entity("ExpenseWebAppDAL.Entities.RefreshToken", b =>
                 {
-                    b.Property<string>("Token")
-                        .HasColumnType("varchar(255)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Expires")
                         .HasColumnType("datetime(6)");
@@ -119,10 +122,14 @@ namespace ExpenseWebAppDAL.Migrations
                     b.Property<bool>("IsRevoked")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("Token");
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId")
                         .IsUnique();
