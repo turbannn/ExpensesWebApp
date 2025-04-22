@@ -16,8 +16,7 @@ namespace ExpenseWebAppBLL.Services
 
         public ExpenseService(IExpenseRepository expenseRepository,
             IValidator<IExpenseTransferObject> expenseValidator,
-            IMapper mapper
-            )
+            IMapper mapper)
         {
             _expenseRepository = expenseRepository;
             _validator = expenseValidator;
