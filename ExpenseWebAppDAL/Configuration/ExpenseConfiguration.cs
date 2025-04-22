@@ -19,9 +19,7 @@ namespace ExpenseWebAppDAL.Configuration
             builder.HasMany(e => e.CategoriesList).WithMany(c => c.Expenses);
 
             builder.Property(e => e.Value).IsRequired();
-
             builder.Property(e => e.Description).IsRequired();
-
             builder.Property(e => e.CreationDate).HasDefaultValueSql("CURRENT_TIMESTAMP()");
 
             builder.HasQueryFilter(e => e.IsDeleted == false);

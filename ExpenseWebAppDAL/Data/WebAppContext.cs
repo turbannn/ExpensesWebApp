@@ -6,15 +6,13 @@ using Microsoft.Extensions.Logging;
 
 namespace ExpenseWebAppDAL.Data
 {
-    public class WebAppContext : DbContext
+    public class WebAppContext(DbContextOptions options) : DbContext(options)
     {
         private static readonly string LogFilePath = "ef_sql_logs.txt";
         public DbSet<Expense> Expenses { get; set; } = null!;
         public DbSet<Category> Categories { get; set; } = null!;
-
-        public WebAppContext(DbContextOptions options) : base(options)
-        {
-        }
+        public DbSet<User> Users { get; set; } = null!;
+        public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
@@ -39,8 +37,9 @@ namespace ExpenseWebAppDAL.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new ExpenseConfiguration());
-
-            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new CategoryConfiguration()); 
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new RefreshTokenConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }
