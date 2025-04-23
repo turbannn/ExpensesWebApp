@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+@model ExpenseWebAppBLL.DTOs.UserDTOs.UserReadDTO
+
+<div class="text-center">
+    <h1 class="display-4">Login</h1>
+</div>
+
+<script src="~/js/HomeFrontend.js"></script>
+
+<!-- Check for id to route the data!!! -->
+<form asp-controller="Home">
+    <input type="hidden" id="UserId" name="Id" value="@Model?.Id" />
+
+    <label class="mt-4">Username</label>
+    <input class="form-control" type="text" id="UserUsername" name="Username" placeholder="Enter name" value="@Model?.Username" />
+
+    <label class="mt-4">Password</label>
+    <input class="form-control" type="text" id="UserPassword" name="Password" placeholder="Enter password" value="@Model?.Password" />
+
+    <button class="btn btn-primary mt-4" type="button" onclick="Login()">Login</button>
+</form>

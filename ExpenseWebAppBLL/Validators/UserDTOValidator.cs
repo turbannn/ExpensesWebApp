@@ -20,10 +20,6 @@ namespace ExpenseWebAppBLL.Validators
                 .NotEmpty().WithMessage("User Password empty error")
                 .MaximumLength(50).WithMessage("User Password Maximum length exceeded");
 
-
-            RuleFor(e => e.Role)
-                .NotEmpty().WithMessage("User Role empty error")
-                .MaximumLength(40).WithMessage("User Role Maximum length exceeded");
         }
     }
 }

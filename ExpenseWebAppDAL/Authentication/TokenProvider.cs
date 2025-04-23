@@ -7,11 +7,16 @@ using JwtRegisteredClaimNames = System.IdentityModel.Tokens.Jwt.JwtRegisteredCla
 
 namespace ExpenseWebAppDAL.Authentication
 {
-    public class TokenProvider(IConfiguration configuration)
+    public class TokenProvider
     {
-        public string CreateToken(int id, string role)
+        private readonly IConfiguration _configuration;
+        public TokenProvider(IConfiguration configuration)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]!));
+            _configuration = configuration;
+        }
+        public string CreateAccessToken(int id, string name)
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:Key"]!));
 
             var securityCred = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
@@ -19,11 +24,11 @@ namespace ExpenseWebAppDAL.Authentication
             {
                 Subject = new ClaimsIdentity([
                     new Claim(JwtRegisteredClaimNames.Sub, id.ToString()),
-                    new Claim(JwtRegisteredClaimNames.Typ, role)
+                    new Claim(JwtRegisteredClaimNames.Name, name)
                 ]),
                 Expires = DateTime.Now.AddMinutes(15),
-                Issuer = configuration["JwtSettings:Issuer"],
-                Audience = configuration["JwtSettings:Audience"],
+                Issuer = _configuration["JwtSettings:Issuer"],
+                Audience = _configuration["JwtSettings:Audience"],
                 SigningCredentials = securityCred
             };
 

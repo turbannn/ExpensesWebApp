@@ -21,7 +21,7 @@ namespace ExpenseWebAppBLL.Services
             _validator = expenseValidator;
             _mapper = mapper;
         }
-        public async Task<IEnumerable<UserReadDTO>> GetAllExpensesAsync()
+        public async Task<IEnumerable<UserReadDTO>> GetAllUsersAsync()
         {
             var users = await _userRepository.GetAllAsync();
 
@@ -29,7 +29,7 @@ namespace ExpenseWebAppBLL.Services
 
             return userDtos;
         }
-        public async Task<UserReadDTO?> GetExpenseByIdAsync(int id)
+        public async Task<UserReadDTO?> GetUserByIdAsync(int id)
         {
             if (id < 0) return null;
 
@@ -41,27 +41,39 @@ namespace ExpenseWebAppBLL.Services
             return userReadDto;
         }
 
-        public async Task<bool> AddExpenseAsync(UserCreateDTO userCreateDto)
+        public async Task<UserReadDTO?> GetUserByNameAndPasswordAsync(string username, string password)
+        {
+            var user = await _userRepository.GetByUsernameAndPasswordAsync(username, password);
+            if (user == null) return null;
+
+            var userReadDto = _mapper.Map<UserReadDTO>(user);
+
+            return userReadDto;
+        }
+
+        public async Task<bool> AddUserAsync(UserCreateDTO userCreateDto)
         {
             var validationResult = await _validator.ValidateAsync(userCreateDto);
             if (!validationResult.IsValid) return false;
 
-            var expense = _mapper.Map<User>(userCreateDto);
+            var user = _mapper.Map<User>(userCreateDto);
 
-            await _userRepository.AddAsync(expense);
+            user.Role = userCreateDto.Role;
+
+            await _userRepository.AddAsync(user);
 
             return true;
         }
 
-        public async Task<bool> UpdateExpenseAsync(UserUpdateDTO userUpdateDto)
+        public async Task<bool> UpdateUserAsync(UserReadDTO userReadDto)
         {
-            var validationResult = await _validator.ValidateAsync(userUpdateDto);
+            var validationResult = await _validator.ValidateAsync(userReadDto);
             if (!validationResult.IsValid) return false;
 
-            var expense = _mapper.Map<User>(userUpdateDto);
+            var user = _mapper.Map<User>(userReadDto);
             try
             {
-                await _userRepository.UpdateAsync(expense);
+                await _userRepository.UpdateAsync(user);
             }
             catch (NullReferenceException exception)
             {
@@ -73,7 +85,7 @@ namespace ExpenseWebAppBLL.Services
             return true;
         }
 
-        public async Task<bool> DeleteExpenseAsync(int id)
+        public async Task<bool> DeleteUserAsync(int id)
         {
 
             if (id < 0) return false;

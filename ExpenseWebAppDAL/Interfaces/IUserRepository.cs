@@ -4,6 +4,6 @@ namespace ExpenseWebAppDAL.Interfaces
 {
     public interface IUserRepository : IRepository<User>
     {
-
+        Task<User?> GetByUsernameAndPasswordAsync(string username, string password);
     }
 }

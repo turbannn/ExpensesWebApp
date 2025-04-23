@@ -12,7 +12,6 @@ namespace ExpenseWebAppDAL.Data
         public DbSet<Expense> Expenses { get; set; } = null!;
         public DbSet<Category> Categories { get; set; } = null!;
         public DbSet<User> Users { get; set; } = null!;
-        public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
@@ -39,7 +38,6 @@ namespace ExpenseWebAppDAL.Data
             modelBuilder.ApplyConfiguration(new ExpenseConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryConfiguration()); 
             modelBuilder.ApplyConfiguration(new UserConfiguration());
-            modelBuilder.ApplyConfiguration(new RefreshTokenConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }

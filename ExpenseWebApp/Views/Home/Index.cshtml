@@ -2,9 +2,10 @@
     ViewData["Title"] = "Home Page";
 }
 
+<script src="~/js/HomeFrontend.js"></script>
+
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <a class="btn btn-primary" asp-action="Index" asp-controller="Expense">Expenses</a>
-    <a class="btn btn-primary" asp-action="Index" asp-controller="Category">Categories</a>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <a class="btn btn-secondary" onclick="LoginRedirection()">Login</a>
+    <a class="btn btn-secondary" onclick="RedirectToRegistration()">SignUp</a>
 </div>

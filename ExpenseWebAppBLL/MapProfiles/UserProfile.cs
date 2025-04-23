@@ -8,10 +8,12 @@ namespace ExpenseWebAppBLL.MapProfiles
     {
         public UserProfile()
         {
-            CreateMap<User, UserCreateDTO>();
+            CreateMap<User, UserReadDTO>();
 
+            CreateMap<UserReadDTO, User>();
             CreateMap<UserCreateDTO, User>();
-            CreateMap<UserUpdateDTO, User>();
+
+            CreateMap<UserCreateDTO, UserReadDTO>();
         }
     }
 }

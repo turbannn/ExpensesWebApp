@@ -105,35 +105,6 @@ namespace ExpenseWebAppDAL.Migrations
                     b.ToTable("Expenses");
                 });
 
-            modelBuilder.Entity("ExpenseWebAppDAL.Entities.RefreshToken", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Expires")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("IsRevoked")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("RefreshTokens");
-                });
-
             modelBuilder.Entity("ExpenseWebAppDAL.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -174,23 +145,6 @@ namespace ExpenseWebAppDAL.Migrations
                         .WithMany()
                         .HasForeignKey("ExpensesId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ExpenseWebAppDAL.Entities.RefreshToken", b =>
-                {
-                    b.HasOne("ExpenseWebAppDAL.Entities.User", "User")
-                        .WithOne("RefreshToken")
-                        .HasForeignKey("ExpenseWebAppDAL.Entities.RefreshToken", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ExpenseWebAppDAL.Entities.User", b =>
-                {
-                    b.Navigation("RefreshToken")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

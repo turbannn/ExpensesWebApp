@@ -1,0 +1,11 @@
+﻿
+@model ExpenseWebAppBLL.DTOs.UserDTOs.UserReadDTO
+
+<h1>User profile</h1>
+
+<script src="~/js/HomeFrontend.js"></script>
+
+<div class="text-center">
+    <h1 class="display-4">Welcome, @{@Model.Username}</h1>
+    <a class="btn btn-secondary" asp-controller="Expense" asp-action="Index">Expenses</a>
+</div>

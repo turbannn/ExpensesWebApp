@@ -3,6 +3,7 @@ using ExpenseWebAppBLL.DTOs.ExpenseDTOs;
 using ExpenseWebAppBLL.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using WebAppTest.Controllers;
 
 namespace ExpenseWebApp.Controllers
@@ -18,6 +19,7 @@ namespace ExpenseWebApp.Controllers
             _expenseService = expenseService;
         }
 
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var expenses = await _expenseService.GetAllExpensesAsync();
@@ -29,6 +31,7 @@ namespace ExpenseWebApp.Controllers
             return View(expenses);
         }
 
+        [Authorize]
         [HttpPost("/Expense/CreateExpense")]
         public async Task<IActionResult> CreateExpense([FromBody] ExpenseCreateDTO expenseDTO)
         {
@@ -45,7 +48,7 @@ namespace ExpenseWebApp.Controllers
             return View();
         }
 
-        //[HttpPut]
+        [Authorize]
         [HttpPut("/Expense/EditExpense/{id}")]
         public async Task<IActionResult> EditExpense([FromBody] ExpenseUpdateDTO expenseDTO)
         {
@@ -57,6 +60,7 @@ namespace ExpenseWebApp.Controllers
             return Json(new { success = true, redirectUrl = Url.Action("Index") });
         }
 
+        [Authorize]
         [Route("/Expense/EditExpense/{id}")]
         public async Task<IActionResult> EditExpense(int id)
         {
@@ -67,6 +71,7 @@ namespace ExpenseWebApp.Controllers
             return View(expense);
         }
 
+        [Authorize]
         [HttpGet("/Expense/GetExpense/{id}")]
         public async Task<IActionResult> GetExpense(int id)
         {
@@ -78,6 +83,7 @@ namespace ExpenseWebApp.Controllers
             return Ok(expense);
         }
 
+        [Authorize]
         [HttpDelete("Expense/DeleteExpense/{id}")]
         public async Task<IActionResult> DeleteExpense(int id)
         {
