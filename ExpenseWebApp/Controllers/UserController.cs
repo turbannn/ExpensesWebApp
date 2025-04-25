@@ -16,10 +16,33 @@ namespace ExpenseWebApp.Controllers
             _userService = userService;
             _tokenProvider = tokenProvider;
         }
+
         [Authorize]
-        public IActionResult UserProfileView(UserReadDTO userReadDto)
+        public async Task<IActionResult> UserProfileViewByObject(UserReadDTO userReadDto)
         {
-            return View(userReadDto);
+            var user = await _userService.GetUserByNameAndPasswordAsync(userReadDto.Username, userReadDto.Password);
+
+            if (user is null) return NotFound();
+
+            var totalExpenses = user.Expenses.Sum(x => x.Value);
+
+            ViewBag.Expenses = totalExpenses;
+
+            return View("UserProfileView", user);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> UserProfileViewById(int userId)
+        {
+            var user = await _userService.GetUserByIdAsync(userId);
+
+            if (user is null) return NotFound();
+
+            var totalExpenses = user.Expenses.Sum(x => x.Value);
+
+            ViewBag.Expenses = totalExpenses;
+
+            return View("UserProfileView", user);
         }
 
         [Route("/User/Register")]
@@ -42,7 +65,18 @@ namespace ExpenseWebApp.Controllers
                 });
             }
 
-            var tokenstr = _tokenProvider.CreateAccessToken(userCreateDto.Id, userCreateDto.Username);
+            var user = await _userService.GetUserByNameAndPasswordAsync(userCreateDto.Username, userCreateDto.Password);
+
+            if (user is null)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "User not found"
+                });
+            }
+
+            var tokenstr = _tokenProvider.CreateAccessToken(user.Id, user.Username);
 
             Response.Cookies.Append("jwt", tokenstr, new CookieOptions
             {

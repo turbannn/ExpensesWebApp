@@ -7,11 +7,11 @@
     const password = document.getElementById("UserPassword").value.trim();
 
     if (!username) {
-        alert("Error: Value cant be empty");
+        alert("Error: Username cant be empty");
         return;
     }
     if (!password) {
-        alert("Error: Description cant be empty");
+        alert("Error: Password cant be empty");
         return;
     }
 

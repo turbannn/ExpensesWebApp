@@ -1,13 +1,11 @@
 ﻿using ExpenseWebAppBLL.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WebAppTest.Controllers;
-using ExpenseWebAppDAL.Entities;
-using Microsoft.EntityFrameworkCore;
 using ExpenseWebAppBLL.DTOs.CategoryDTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ExpenseWebApp.Controllers
 {
+    [Authorize]
     public class CategoryController : Controller
     {
         private readonly ILogger<HomeController> _logger;

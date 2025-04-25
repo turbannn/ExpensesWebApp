@@ -9,6 +9,7 @@ namespace ExpenseWebAppBLL.DTOs.ExpenseDTOs
 {
     public class ExpenseUpdateDTO : BaseDataTransferObject, IExpenseTransferObject
     {
+        public int UserId { get; set; }
         public double Value { get; set; }
         public string Description { get; set; } = null!;
         public DateTime? CreationDate { get; set; }

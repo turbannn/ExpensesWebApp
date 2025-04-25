@@ -4,7 +4,9 @@ using ExpenseWebAppBLL.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
-using WebAppTest.Controllers;
+using System.Security.Claims;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using ExpenseWebAppDAL.Entities;
 
 namespace ExpenseWebApp.Controllers
 {
@@ -35,13 +37,28 @@ namespace ExpenseWebApp.Controllers
         [HttpPost("/Expense/CreateExpense")]
         public async Task<IActionResult> CreateExpense([FromBody] ExpenseCreateDTO expenseDTO)
         {
-            var createTaskResult = await _expenseService.AddExpenseAsync(expenseDTO);
+            var idStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "no";
 
-            if (!createTaskResult)
+            if (!int.TryParse(idStr, out int id))
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "Id parse error"
+                });
+            }
+
+            expenseDTO.UserId = id;
+
+            var creationTaskResult = await _expenseService.AddExpenseAsync(expenseDTO);
+
+            if (!creationTaskResult)
                 return BadRequest("Data not sent");
 
-            return Json(new { success = true, redirectUrl = Url.Action("Index") });
+            return Json(new { success = true, redirectUrl = Url.Action("UserProfileViewById", "User", new { userId = expenseDTO.UserId }) });
         }
+
+        [Authorize]
         [Route("/Expense/CreateExpense")]
         public IActionResult CreateExpense()
         {
@@ -52,12 +69,25 @@ namespace ExpenseWebApp.Controllers
         [HttpPut("/Expense/EditExpense/{id}")]
         public async Task<IActionResult> EditExpense([FromBody] ExpenseUpdateDTO expenseDTO)
         {
+            var idStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "no";
+
+            if (!int.TryParse(idStr, out int id))
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "Id parse error"
+                });
+            }
+
+            expenseDTO.UserId = id;
+
             var updateTaskResult = await _expenseService.UpdateExpenseAsync(expenseDTO);
 
             if (!updateTaskResult)
                 return BadRequest("Invalid data");
 
-            return Json(new { success = true, redirectUrl = Url.Action("Index") });
+            return Json(new { success = true, redirectUrl = Url.Action("UserProfileViewById", "User", new { userId = expenseDTO.UserId }) });
         }
 
         [Authorize]

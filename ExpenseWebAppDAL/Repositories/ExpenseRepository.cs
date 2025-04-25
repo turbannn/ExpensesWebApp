@@ -18,6 +18,7 @@ namespace ExpenseWebAppDAL.Repositories
         {
             return await _context.Expenses
                 .AsNoTracking()
+                .Include(e => e.User)
                 .Include(e => e.CategoriesList)
                 .ToListAsync();
         }
@@ -26,6 +27,7 @@ namespace ExpenseWebAppDAL.Repositories
         {
             return await _context.Expenses
                 .AsNoTracking()
+                .Include(e => e.User)
                 .Include(e => e.CategoriesList)
                 .FirstOrDefaultAsync(e => e.Id == id);
         }

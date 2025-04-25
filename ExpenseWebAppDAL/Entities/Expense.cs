@@ -1,11 +1,5 @@
 ﻿using ExpenseWebAppDAL.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExpenseWebAppDAL.Entities;
 
@@ -27,6 +21,10 @@ public class Expense : ISoftDeletable
     public bool IsDeleted { get; set; }
     [Column(nameof(DeletedAt))]
     public DateTimeOffset? DeletedAt { get; set; }
+
+    public int UserId { get; set; }
+    [ForeignKey(nameof(UserId))]
+    public User User { get; set; }
 
     public List<Category>? CategoriesList { get; set; }
 

@@ -1,11 +1,13 @@
-﻿using ExpenseWebAppBLL.Interfaces;
+﻿using ExpenseWebAppBLL.DTOs.ExpenseDTOs;
+using ExpenseWebAppBLL.Interfaces;
 
 namespace ExpenseWebAppBLL.DTOs.UserDTOs
 {
-    public class UserReadDTO : IUserTransferObject
+    public class UserReadDTO : BaseDataTransferObject, IUserTransferObject
     {
-        public int Id { get; set ; }
         public string Username { get; set; }
         public string Password { get; set; }
+
+        public List<ExpenseReadDTO> Expenses { get; set; } = null!;
     }
 }

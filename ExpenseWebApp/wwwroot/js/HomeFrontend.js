@@ -41,7 +41,23 @@
     });
 }
 function LoginRedirection() {
-    window.location.href = "/Home/TryLogin";
+
+    fetch("/Home/TryLogin")
+        .then(response => response.json())
+        .then(result => {
+            console.log("Server response:", result);
+
+            if (result.success) {
+                window.location.href = result.redirectUrl;
+            } else {
+                alert("Login error: " + (result.message || "Unknown error"));
+            }
+        })
+        .catch(error => {
+            console.error("Request sending error:", error);
+            alert("Data sending error");
+        });
+    //window.location.href = "/Home/TryLogin";
 }
 
 function RedirectToRegistration() {

@@ -9,6 +9,7 @@ namespace ExpenseWebAppBLL.Interfaces
 {
     public interface IExpenseTransferObject : ITransferObject
     {
+        public int UserId { get; set; }
         double Value { get; set; }
         string Description { get; set; }
         public DateTime? CreationDate { get; set; }

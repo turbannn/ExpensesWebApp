@@ -7,5 +7,7 @@ namespace ExpenseWebAppDAL.Entities
         public string Username { get; set; } = null!;
         public string Password { get; set; } = null!;
         public string Role { get; set; } = null!;
+
+        public List<Expense> Expenses { get; set; } = null!;
     }
 }

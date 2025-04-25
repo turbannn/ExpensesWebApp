@@ -5,8 +5,9 @@ using ExpenseWebAppBLL.Services;
 using ExpenseWebAppBLL.DTOs.UserDTOs;
 using ExpenseWebAppDAL.Authentication;
 using System.Security.Claims;
+using System.Text.Json;
 
-namespace WebAppTest.Controllers
+namespace ExpenseWebApp.Controllers
 {
     //need async refactor
     //[Route("Home/[controller]")]
@@ -30,7 +31,7 @@ namespace WebAppTest.Controllers
         {
             var AT = Request.Cookies["jwt"];
 
-            if (AT == null)
+            if (AT is null)
             {
                 return View();
             }
@@ -48,16 +49,16 @@ namespace WebAppTest.Controllers
 
             var user = await _userService.GetUserByIdAsync(id);
 
-            if (user == null)
+            if (user is null)
             {
                 return Json(new
                 {
                     success = false,
-                    message = "User not found Or password does not match"
+                    message = "User not found"
                 });
             }
 
-            return RedirectToAction("UserProfileView", "User", user);
+            return RedirectToAction("UserProfileViewByObject", "User", user);
         }
 
         [HttpPost("/Home/SubmitLogin")]
@@ -65,7 +66,7 @@ namespace WebAppTest.Controllers
         {
             var user = await _userService.GetUserByNameAndPasswordAsync(userReadDto.Username, userReadDto.Password);
 
-            if (user == null)
+            if (user is null)
             {
                 return Json(new
                 {
@@ -83,8 +84,8 @@ namespace WebAppTest.Controllers
                 SameSite = SameSiteMode.Strict,
                 Expires = DateTime.Now.AddMinutes(15)
             });
-
-            return Json(new { success = true, redirectUrl = Url.Action("UserProfileView", "User", user)});
+            
+            return Json(new { success = true, redirectUrl = Url.Action("UserProfileViewById", "User", new { userId = user.Id }) });
         }
 
         public IActionResult Privacy()

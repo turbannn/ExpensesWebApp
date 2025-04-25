@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using ExpenseWebAppDAL.Data;
+﻿using ExpenseWebAppDAL.Data;
 using ExpenseWebAppDAL.Entities;
 using ExpenseWebAppDAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -16,17 +15,28 @@ namespace ExpenseWebAppDAL.Repositories
         }
         public async Task<IEnumerable<User>> GetAllAsync()
         {
-            return await _context.Users.AsNoTracking().ToListAsync();
+            return await _context.Users
+                .AsNoTracking()
+                .Include(u => u.Expenses)
+                .ThenInclude(e => e.CategoriesList)
+                .ToListAsync();
         }
 
         public async Task<User?> GetByUsernameAndPasswordAsync(string username, string password)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+            return await _context.Users
+                .Include(u => u.Expenses)
+                .ThenInclude(e => e.CategoriesList)
+                .FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
         }
 
         public async Task<User?> GetByIdAsync(int id)
         {
-            return await _context.Users.AsNoTracking().SingleOrDefaultAsync(u => u.Id == id);
+            return await _context.Users
+                .AsNoTracking()
+                .Include(u => u.Expenses)
+                .ThenInclude(e => e.CategoriesList)
+                .SingleOrDefaultAsync(u => u.Id == id);
         }
         public async Task AddAsync(User entityToAdd)
         {
