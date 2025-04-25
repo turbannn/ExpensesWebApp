@@ -3,6 +3,7 @@ using ExpenseWebAppBLL.Services;
 using ExpenseWebAppDAL.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace ExpenseWebApp.Controllers
 {
@@ -18,31 +19,37 @@ namespace ExpenseWebApp.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> UserProfileViewByObject(UserReadDTO userReadDto)
+        public async Task<IActionResult> UserProfileView()
         {
-            var user = await _userService.GetUserByNameAndPasswordAsync(userReadDto.Username, userReadDto.Password);
+            var idStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "no";
 
-            if (user is null) return NotFound();
+            if (!int.TryParse(idStr, out int id))
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "Id parse error"
+                });
+            }
+
+            var user = await _userService.GetUserByIdAsync(id);
+
+            if (user is null)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "User not found"
+                });
+            }
+
+            //var user = await _userService.GetUserByNameAndPasswordAsync(userReadDto.Username, userReadDto.Password);
 
             var totalExpenses = user.Expenses.Sum(x => x.Value);
 
             ViewBag.Expenses = totalExpenses;
 
-            return View("UserProfileView", user);
-        }
-
-        [Authorize]
-        public async Task<IActionResult> UserProfileViewById(int userId)
-        {
-            var user = await _userService.GetUserByIdAsync(userId);
-
-            if (user is null) return NotFound();
-
-            var totalExpenses = user.Expenses.Sum(x => x.Value);
-
-            ViewBag.Expenses = totalExpenses;
-
-            return View("UserProfileView", user);
+            return View(user);
         }
 
         [Route("/User/Register")]

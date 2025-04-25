@@ -35,30 +35,8 @@ namespace ExpenseWebApp.Controllers
             {
                 return View();
             }
-
-            var idStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "no";
-
-            if (!int.TryParse(idStr, out int id))
-            {
-                return Json(new
-                {
-                    success = false,
-                    message = "Id parse error"
-                });
-            }
-
-            var user = await _userService.GetUserByIdAsync(id);
-
-            if (user is null)
-            {
-                return Json(new
-                {
-                    success = false,
-                    message = "User not found"
-                });
-            }
-
-            return RedirectToAction("UserProfileViewByObject", "User", user);
+            
+            return RedirectToAction("UserProfileView", "User");
         }
 
         [HttpPost("/Home/SubmitLogin")]
@@ -85,7 +63,7 @@ namespace ExpenseWebApp.Controllers
                 Expires = DateTime.Now.AddMinutes(15)
             });
             
-            return Json(new { success = true, redirectUrl = Url.Action("UserProfileViewById", "User", new { userId = user.Id }) });
+            return Json(new { success = true, redirectUrl = Url.Action("UserProfileView", "User") });
         }
 
         public IActionResult Privacy()

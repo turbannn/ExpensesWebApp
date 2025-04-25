@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using ExpenseWebAppDAL.Configuration;
 using ExpenseWebAppDAL.Interfaces;
-using Microsoft.Extensions.Logging;
 
 namespace ExpenseWebAppDAL.Data
 {
@@ -29,7 +28,7 @@ namespace ExpenseWebAppDAL.Data
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.LogTo(AppendLogToFile, LogLevel.Debug);
+            optionsBuilder.LogTo(AppendLogToFile);
 
             base.OnConfiguring(optionsBuilder);
         }

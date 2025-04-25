@@ -55,7 +55,7 @@ namespace ExpenseWebApp.Controllers
             if (!creationTaskResult)
                 return BadRequest("Data not sent");
 
-            return Json(new { success = true, redirectUrl = Url.Action("UserProfileViewById", "User", new { userId = expenseDTO.UserId }) });
+            return Json(new { success = true, redirectUrl = Url.Action("UserProfileView", "User") });
         }
 
         [Authorize]
@@ -87,7 +87,7 @@ namespace ExpenseWebApp.Controllers
             if (!updateTaskResult)
                 return BadRequest("Invalid data");
 
-            return Json(new { success = true, redirectUrl = Url.Action("UserProfileViewById", "User", new { userId = expenseDTO.UserId }) });
+            return Json(new { success = true, redirectUrl = Url.Action("UserProfileView", "User") });
         }
 
         [Authorize]
