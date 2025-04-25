@@ -21,7 +21,7 @@ namespace ExpenseWebApp.Controllers
             _expenseService = expenseService;
         }
 
-        [Authorize]
+        [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> Index()
         {
             var expenses = await _expenseService.GetAllExpensesAsync();
@@ -33,7 +33,7 @@ namespace ExpenseWebApp.Controllers
             return View(expenses);
         }
 
-        [Authorize]
+        [Authorize(Roles = "User,Admin")]
         [HttpPost("/Expense/CreateExpense")]
         public async Task<IActionResult> CreateExpense([FromBody] ExpenseCreateDTO expenseDTO)
         {
@@ -58,14 +58,14 @@ namespace ExpenseWebApp.Controllers
             return Json(new { success = true, redirectUrl = Url.Action("UserProfileView", "User") });
         }
 
-        [Authorize]
+        [Authorize(Roles = "User,Admin")]
         [Route("/Expense/CreateExpense")]
         public IActionResult CreateExpense()
         {
             return View();
         }
 
-        [Authorize]
+        [Authorize(Roles = "User,Admin")]
         [HttpPut("/Expense/EditExpense/{id}")]
         public async Task<IActionResult> EditExpense([FromBody] ExpenseUpdateDTO expenseDTO)
         {
@@ -90,7 +90,7 @@ namespace ExpenseWebApp.Controllers
             return Json(new { success = true, redirectUrl = Url.Action("UserProfileView", "User") });
         }
 
-        [Authorize]
+        [Authorize(Roles = "User,Admin")]
         [Route("/Expense/EditExpense/{id}")]
         public async Task<IActionResult> EditExpense(int id)
         {
@@ -101,7 +101,7 @@ namespace ExpenseWebApp.Controllers
             return View(expense);
         }
 
-        [Authorize]
+        [Authorize(Roles = "User,Admin")]
         [HttpGet("/Expense/GetExpense/{id}")]
         public async Task<IActionResult> GetExpense(int id)
         {
@@ -113,7 +113,7 @@ namespace ExpenseWebApp.Controllers
             return Ok(expense);
         }
 
-        [Authorize]
+        [Authorize(Roles = "User,Admin")]
         [HttpDelete("Expense/DeleteExpense/{id}")]
         public async Task<IActionResult> DeleteExpense(int id)
         {

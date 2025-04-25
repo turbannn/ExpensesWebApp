@@ -17,12 +17,14 @@ namespace ExpenseWebApp.Controllers
             _categoryService = categoryService;
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             var categories = _categoryService.GetAllCategoriesAsync().Result;
             return View(categories);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("/Category/CreateCategory")]
         public async Task<IActionResult> CreateCategory([FromBody] CategoryDTO categoryDTO)
         {
@@ -35,6 +37,7 @@ namespace ExpenseWebApp.Controllers
             return View();
         }
 
+        [Authorize(Roles = "User")]
         [HttpGet("/Category/GetCategories")]
         public IActionResult GetCategories(int id)
         {
@@ -43,6 +46,7 @@ namespace ExpenseWebApp.Controllers
             return Json(categories);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("/Category/EditCategory/{id}")]
         public async Task<IActionResult> EditCategory([FromBody] CategoryDTO categoryDTO)
         {
@@ -51,6 +55,7 @@ namespace ExpenseWebApp.Controllers
             return Json(new { success = true, redirectUrl = Url.Action("Index") });
         }
 
+        [Authorize(Roles = "Admin")]
         [Route("/Category/EditCategory/{id}")]
         public async Task<IActionResult> EditCategory(int id)
         {
@@ -61,6 +66,7 @@ namespace ExpenseWebApp.Controllers
             return View(category);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("/Category/DeleteCategory/{id}")]
         public IActionResult Delete(int id)
         {
