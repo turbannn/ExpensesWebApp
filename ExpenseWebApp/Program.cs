@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using System.Security.Claims;
 using ExpenseWebAppBLL.Services;
 using ExpenseWebAppDAL.Data;
 using ExpenseWebAppDAL.Interfaces;
@@ -59,7 +60,8 @@ namespace ExpenseWebApp
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = jwtSettings["Issuer"],
                         ValidAudience = jwtSettings["Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
+                        RoleClaimType = ClaimTypes.Role
                     };
                     options.Events = new JwtBearerEvents
                     {

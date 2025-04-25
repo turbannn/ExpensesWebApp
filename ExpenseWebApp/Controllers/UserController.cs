@@ -18,7 +18,7 @@ namespace ExpenseWebApp.Controllers
             _tokenProvider = tokenProvider;
         }
 
-        [Authorize]
+        [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> UserProfileView()
         {
             var idStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "no";
@@ -42,8 +42,6 @@ namespace ExpenseWebApp.Controllers
                     message = "User not found"
                 });
             }
-
-            //var user = await _userService.GetUserByNameAndPasswordAsync(userReadDto.Username, userReadDto.Password);
 
             var totalExpenses = user.Expenses.Sum(x => x.Value);
 
@@ -83,7 +81,7 @@ namespace ExpenseWebApp.Controllers
                 });
             }
 
-            var tokenstr = _tokenProvider.CreateAccessToken(user.Id, user.Username);
+            var tokenstr = _tokenProvider.CreateAccessToken(user.Id, user.Role);
 
             Response.Cookies.Append("jwt", tokenstr, new CookieOptions
             {

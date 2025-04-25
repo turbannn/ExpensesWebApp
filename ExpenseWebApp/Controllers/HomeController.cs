@@ -4,14 +4,9 @@ using ExpenseWebApp.Models;
 using ExpenseWebAppBLL.Services;
 using ExpenseWebAppBLL.DTOs.UserDTOs;
 using ExpenseWebAppDAL.Authentication;
-using System.Security.Claims;
-using System.Text.Json;
 
 namespace ExpenseWebApp.Controllers
 {
-    //need async refactor
-    //[Route("Home/[controller]")]
-    //[ApiController]
     public class HomeController : Controller
     {
         private readonly UserService _userService;
@@ -40,9 +35,9 @@ namespace ExpenseWebApp.Controllers
         }
 
         [HttpPost("/Home/SubmitLogin")]
-        public async Task<IActionResult> SubmitLogin([FromBody] UserReadDTO userReadDto)
+        public async Task<IActionResult> SubmitLogin([FromBody] UserLogin userLogin)
         {
-            var user = await _userService.GetUserByNameAndPasswordAsync(userReadDto.Username, userReadDto.Password);
+            var user = await _userService.GetUserByNameAndPasswordAsync(userLogin.Username, userLogin.Password);
 
             if (user is null)
             {
@@ -53,7 +48,7 @@ namespace ExpenseWebApp.Controllers
                 });
             }
 
-            var tokenstr = _tokenProvider.CreateAccessToken(user.Id, user.Username);
+            var tokenstr = _tokenProvider.CreateAccessToken(user.Id, user.Role);
 
             Response.Cookies.Append("jwt", tokenstr, new CookieOptions
             {

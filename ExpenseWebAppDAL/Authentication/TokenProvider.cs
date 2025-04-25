@@ -14,7 +14,7 @@ namespace ExpenseWebAppDAL.Authentication
         {
             _configuration = configuration;
         }
-        public string CreateAccessToken(int id, string name)
+        public string CreateAccessToken(int id, string role)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:Key"]!));
 
@@ -24,7 +24,7 @@ namespace ExpenseWebAppDAL.Authentication
             {
                 Subject = new ClaimsIdentity([
                     new Claim(JwtRegisteredClaimNames.Sub, id.ToString()),
-                    new Claim(JwtRegisteredClaimNames.Name, name)
+                    new Claim(ClaimTypes.Role, role)
                 ]),
                 Expires = DateTime.Now.AddMinutes(15),
                 Issuer = _configuration["JwtSettings:Issuer"],
