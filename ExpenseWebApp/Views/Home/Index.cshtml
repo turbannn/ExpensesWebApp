@@ -4,8 +4,10 @@
 
 <script src="~/js/HomeFrontend.js"></script>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <a class="btn btn-secondary" onclick="LoginRedirection()">Login</a>
-    <a class="btn btn-secondary" onclick="RedirectToRegistration()">SignUp</a>
+<div class="d-flex flex-column align-items-center justify-content-center" style="height: 80vh;">
+    <h1 class="display-3 mb-4" style="font-weight: bold; color: #333;">Expenses Tracker</h1>
+    <div class="d-flex gap-3">
+        <button class="btn btn-outline-primary btn-lg" onclick="LoginRedirection()">Login</button>
+        <button class="btn btn-outline-success btn-lg" onclick="RedirectToRegistration()">Sign Up</button>
+    </div>
 </div>

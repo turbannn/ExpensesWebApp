@@ -1,69 +1,51 @@
-﻿
-@model ExpenseWebAppBLL.DTOs.UserDTOs.UserReadDTO
+﻿@model ExpenseWebAppBLL.DTOs.UserDTOs.UserReadDTO
 
-<h1>User profile</h1>
-
-<script src="~/js/HomeFrontend.js"></script>
+<script src="~/js/UsersFrontend.js"></script>
 <script src="~/js/ExpensesFrontend.js"></script>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome, @{@Model.Username}</h1>
-    
-    <a class="btn btn-secondary" onclick="RedirectToExpenseCreation()">Create new Expense</a>
+<div class="container mt-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 style="font-weight: bold; color: #333;">Welcome, @Model.Username!</h1>
+            <p class="text-muted">Here is your expense dashboard</p>
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <a class="btn btn-outline-success" onclick="RedirectToExpenseCreation()">+ Create New Expense</a>
+        <button class="btn btn-outline-danger" onclick="logout()">Log Out</button>
+    </div>
+
     <hr />
-    <h3>Total Expenses: $@ViewBag.Expenses</h3>
-    <br />
 
-    <table class="table">
-        <thead>
+    <h3 class="mb-4" style="color: #555;">Total Expenses: <strong>$@ViewBag.Expenses</strong></h3>
+
+    <table class="table table-hover">
+        <thead class="table-light">
         <tr>
-            <th>
-                Id
-            </th>
-            <th>
-                Value
-            </th>
-            <th>
-                Description
-            </th>
-            <th>
-                Creation Date
-            </th>
-            <th>
-                Categories
-            </th>
-            <th>
-                Actions
-            </th>
-
+            <th>Id</th>
+            <th>Value</th>
+            <th>Description</th>
+            <th>Creation Date</th>
+            <th>Categories</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
-        @{
-            foreach (var e in Model.Expenses)
-            {
-                <tr>
-                    <td>
-                        @e.Id
-                    </td>
-                    <td>
-                        @e.Value
-                    </td>
-                    <td>
-                        @e.Description
-                    </td>
-                    <td>
-                        @e.CreationDate
-                    </td>
-                    <td>
-                        @e.Categories
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-light" onclick="RedirectToExpenseEditing(@e.Id)">Edit</button>
-                        <button asp-controller="Home" type="button" class="btn btn-light" onclick="deleteExpense(@e.Id)">Delete</button>
-                    </td>
-                </tr>
-            }
+        @foreach (var e in Model.Expenses)
+        {
+            <tr>
+                <td>@e.Id</td>
+                <td>$@e.Value</td>
+                <td>@e.Description</td>
+                <td>@(e.CreationDate?.ToString("yyyy-MM-dd") ?? "-")</td>
+                <td>@e.Categories</td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-outline-primary me-1" onclick="RedirectToExpenseEditing(@e.Id)">Edit</button>
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteExpense(@e.Id)">Delete</button>
+                </td>
+            </tr>
         }
         </tbody>
     </table>

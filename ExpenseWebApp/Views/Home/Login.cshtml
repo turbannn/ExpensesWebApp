@@ -4,19 +4,23 @@
 
 @model ExpenseWebAppBLL.DTOs.UserDTOs.UserLogin
 
-<div class="text-center">
-    <h1 class="display-4">Login</h1>
+<script src="~/js/UsersFrontend.js"></script>
+
+<div class="d-flex align-items-center justify-content-center" style="height: 80vh;">
+    <div style="width: 400px;">
+        <h1 class="mb-4 text-start" style="font-weight: bold; color: #333;">Login</h1>
+        <form asp-controller="Home">
+            <div class="mb-3 text-start">
+                <label class="form-label">Username</label>
+                <input class="form-control" type="text" id="LoginUsername" name="Username" placeholder="Enter username" value="@Model?.Username" />
+            </div>
+
+            <div class="mb-4 text-start">
+                <label class="form-label">Password</label>
+                <input class="form-control" type="password" id="LoginPassword" name="Password" placeholder="Enter password" value="@Model?.Password" />
+            </div>
+
+            <button class="btn btn-outline-primary w-100" type="button" onclick="submitLogin()">Login</button>
+        </form>
+    </div>
 </div>
-
-<script src="~/js/HomeFrontend.js"></script>
-
-<!-- Check for id to route the data!!! -->
-<form asp-controller="Home">
-    <label class="mt-4">Username</label>
-    <input class="form-control" type="text" id="LoginUsername" name="Username" placeholder="Enter name" value="@Model?.Username" />
-
-    <label class="mt-4">Password</label>
-    <input class="form-control" type="text" id="LoginPassword" name="Password" placeholder="Enter password" value="@Model?.Password" />
-
-    <button class="btn btn-primary mt-4" type="button" onclick="Login()">Login</button>
-</form>

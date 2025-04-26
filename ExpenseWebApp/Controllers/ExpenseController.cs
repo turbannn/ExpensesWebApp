@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using ExpenseWebAppDAL.Entities;
 
 namespace ExpenseWebApp.Controllers
 {
@@ -21,7 +19,8 @@ namespace ExpenseWebApp.Controllers
             _expenseService = expenseService;
         }
 
-        [Authorize(Roles = "User,Admin")]
+        [Authorize(Roles = "Admin")]
+        [Route("/Expense/")]
         public async Task<IActionResult> Index()
         {
             var expenses = await _expenseService.GetAllExpensesAsync();
@@ -122,7 +121,7 @@ namespace ExpenseWebApp.Controllers
             if (!deleteTaskResult)
                 return BadRequest("Invalid data");
 
-            return Json(new { success = true, redirectUrl = Url.Action("Index") });
+            return Json(new { success = true, redirectUrl = Url.Action("UserProfileView", "User") });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
