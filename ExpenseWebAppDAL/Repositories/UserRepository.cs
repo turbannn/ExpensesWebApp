@@ -30,6 +30,14 @@ namespace ExpenseWebAppDAL.Repositories
                 .FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
         }
 
+        public async Task<User?> GetByUsernameAsync(string username)
+        {
+            return await _context.Users
+                .Include(u => u.Expenses)
+                .ThenInclude(e => e.CategoriesList)
+                .FirstOrDefaultAsync(u => u.Username == username);
+        }
+
         public async Task<User?> GetByIdAsync(int id)
         {
             return await _context.Users

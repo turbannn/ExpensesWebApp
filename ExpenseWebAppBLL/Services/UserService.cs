@@ -12,14 +12,17 @@ namespace ExpenseWebAppBLL.Services
         private readonly IUserRepository _userRepository;
         private readonly IValidator<IUserTransferObject> _validator;
         private readonly IMapper _mapper;
+        private readonly IPasswordHasher _passwordHasher;
 
         public UserService(IUserRepository expenseRepository,
             IValidator<IUserTransferObject> expenseValidator,
-            IMapper mapper)
+            IMapper mapper,
+            IPasswordHasher passwordHasher)
         {
             _userRepository = expenseRepository;
             _validator = expenseValidator;
             _mapper = mapper;
+            _passwordHasher = passwordHasher;
         }
         public async Task<IEnumerable<UserReadDTO>> GetAllUsersAsync()
         {
@@ -43,12 +46,13 @@ namespace ExpenseWebAppBLL.Services
 
         public async Task<UserReadDTO?> GetUserByNameAndPasswordAsync(string username, string password)
         {
-            var user = await _userRepository.GetByUsernameAndPasswordAsync(username, password);
-            if (user == null) return null;
+            var user = await _userRepository.GetByUsernameAsync(username);
+            if (user is null) return null;
 
-            var userReadDto = _mapper.Map<UserReadDTO>(user);
+            var isPasswordValid = _passwordHasher.VerifyPassword(password, user.Password);
+            if (!isPasswordValid) return null;
 
-            return userReadDto;
+            return _mapper.Map<UserReadDTO>(user);
         }
 
         public async Task<bool> AddUserAsync(UserCreateDTO userCreateDto)
@@ -58,6 +62,9 @@ namespace ExpenseWebAppBLL.Services
 
             var user = _mapper.Map<User>(userCreateDto);
 
+            var passwordHash = _passwordHasher.HashPassword(userCreateDto.Password);
+
+            user.Password = passwordHash;
             user.Role = userCreateDto.Role;
 
             await _userRepository.AddAsync(user);
