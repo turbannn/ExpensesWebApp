@@ -20,7 +20,7 @@ namespace ExpenseWebApp.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [Route("/Expense/")]
+        [HttpGet("/Expense/")]
         public async Task<IActionResult> Index()
         {
             var expenses = await _expenseService.GetAllExpensesAsync();
@@ -58,7 +58,7 @@ namespace ExpenseWebApp.Controllers
         }
 
         [Authorize(Roles = "User,Admin")]
-        [Route("/Expense/CreateExpense")]
+        [HttpGet("/Expense/CreateExpense")]
         public IActionResult CreateExpense()
         {
             return View();
@@ -90,7 +90,7 @@ namespace ExpenseWebApp.Controllers
         }
 
         [Authorize(Roles = "User,Admin")]
-        [Route("/Expense/EditExpense/{id}")]
+        [HttpGet("/Expense/EditExpense/{id}")]
         public async Task<IActionResult> EditExpense(int id)
         {
             var expense = await _expenseService.GetExpenseByIdAsync(id);

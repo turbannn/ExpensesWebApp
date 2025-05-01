@@ -14,8 +14,8 @@ namespace ExpenseWebApp.Controllers
             return View();
         }
 
-        [Route("/Home/TryLogin")]
-        public async Task<IActionResult> Login()
+        [HttpGet("/Home/TryLogin")]
+        public IActionResult Login()
         {
             var AT = Request.Cookies["jwt"];
 
@@ -27,7 +27,7 @@ namespace ExpenseWebApp.Controllers
             return RedirectToAction("UserProfileView", "User");
         }
 
-        [Route("/Home/Register")]
+        [HttpGet("/Home/Register")]
         public IActionResult RegistrationView()
         {
             return View("RegistrationView");

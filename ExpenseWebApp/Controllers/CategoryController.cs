@@ -56,7 +56,7 @@ namespace ExpenseWebApp.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [Route("/Category/EditCategory/{id}")]
+        [HttpGet("/Category/EditCategory/{id}")]
         public async Task<IActionResult> EditCategory(int id)
         {
             var category = await _categoryService.GetCategoryByIdAsync(id);

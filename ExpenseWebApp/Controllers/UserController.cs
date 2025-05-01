@@ -46,7 +46,7 @@ namespace ExpenseWebApp.Controllers
         }
 
         [Authorize(Roles = "User,Admin")]
-        [Route("/User/UserProfile")]
+        [HttpGet("/User/UserProfile")]
         public async Task<IActionResult> UserProfileView()
         {
             var idStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "no";
