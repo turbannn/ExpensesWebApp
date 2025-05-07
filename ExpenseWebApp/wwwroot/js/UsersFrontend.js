@@ -46,6 +46,7 @@ async function submitRegistration() {
     const role = document.getElementById("UserRole").value.trim();
     const username = document.getElementById("UserUsername").value.trim();
     const password = document.getElementById("UserPassword").value.trim();
+    const email = document.getElementById("UserEmail").value.trim();
 
     if (!username) {
         alert("Error: Username cant be empty");
@@ -57,7 +58,7 @@ async function submitRegistration() {
     }
 
     const user = {
-        Id: id, Username: username, Password: password, Role: role
+        Id: id, Username: username, Password: password, Role: role, Email: email
     };
 
     console.log("Sending data:", user);

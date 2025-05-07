@@ -19,6 +19,8 @@ namespace ExpenseWebAppDAL.Configuration
             builder.Property(u => u.Username).IsRequired().HasMaxLength(40);
             builder.Property(u => u.Password).IsRequired().HasMaxLength(70);
             builder.Property(u => u.Role).IsRequired().HasMaxLength(40);
+            builder.HasIndex(u => u.Email).IsUnique();
+            builder.Property(u => u.Email).HasMaxLength(40);
         }
     }
 }

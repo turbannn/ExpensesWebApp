@@ -14,11 +14,14 @@ namespace ExpenseWebAppBLL.Validators
             //str
             RuleFor(e => e.Username)
                 .NotEmpty().WithMessage("User Username is empty")
-                .MaximumLength(40).WithMessage("User Username Maximum length exceeded");
+                .MaximumLength(40).WithMessage("User Username maximum length exceeded");
+
+            RuleFor(e => e.Email)
+                .MaximumLength(40).WithMessage("User Email maximum length exceeded");
 
             RuleFor(e => e.Role)
                 .NotEmpty().WithMessage("User Role is empty")
-                .MaximumLength(10).WithMessage("User Role Maximum length exceeded");
+                .MaximumLength(10).WithMessage("User Role maximum length exceeded");
 
         }
     }
