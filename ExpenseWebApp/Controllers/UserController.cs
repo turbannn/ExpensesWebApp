@@ -123,6 +123,25 @@ namespace ExpenseWebApp.Controllers
             return Json(new { success = true, redirectUrl = Url.Action("Index", "Home") });
         }
 
+        [HttpPost("/User/SubmitPasswordReset")]
+        public async Task<IActionResult> SubmitPasswordReset([FromBody] string email)
+        {
+            Console.WriteLine($"Reset requested for email: {email}");
+
+            var emailSendingResult = await _userService.ResetUserPasswordAsync(email);
+
+            if (!emailSendingResult)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "Email not sent"
+                });
+            }
+
+            return Json(new { success = true, redirectUrl = Url.Action("Index", "Home") });
+        }
+
         public IActionResult Index()
         {
             return View();

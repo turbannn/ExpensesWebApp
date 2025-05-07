@@ -4,6 +4,7 @@ using ExpenseWebAppBLL.DTOs.UserDTOs;
 using ExpenseWebAppBLL.Interfaces;
 using FluentValidation;
 using AutoMapper;
+using System;
 
 namespace ExpenseWebAppBLL.Services
 {
@@ -13,17 +14,21 @@ namespace ExpenseWebAppBLL.Services
         private readonly IValidator<IUserTransferObject> _validator;
         private readonly IMapper _mapper;
         private readonly IPasswordHasher _passwordHasher;
+        private readonly IEmailHandler _emailHandler;
 
         public UserService(IUserRepository expenseRepository,
             IValidator<IUserTransferObject> expenseValidator,
             IMapper mapper,
-            IPasswordHasher passwordHasher)
+            IPasswordHasher passwordHasher,
+            IEmailHandler emailHandler)
         {
             _userRepository = expenseRepository;
             _validator = expenseValidator;
             _mapper = mapper;
             _passwordHasher = passwordHasher;
+            _emailHandler = emailHandler;
         }
+
         public async Task<IEnumerable<UserReadDTO>> GetAllUsersAsync()
         {
             var users = await _userRepository.GetAllAsync();
@@ -94,10 +99,27 @@ namespace ExpenseWebAppBLL.Services
 
         public async Task<bool> DeleteUserAsync(int id)
         {
-
             if (id < 0) return false;
 
             await _userRepository.DeleteAsync(id);
+            return true;
+        }
+
+        public async Task<bool> ResetUserPasswordAsync(string email)
+        {
+            var str = "Another \n new \n password";
+
+            try
+            {
+                await _emailHandler.SendEmail(email, "Expenses Tracker password reset", str);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("ERROR: email not sent");
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+
             return true;
         }
     }

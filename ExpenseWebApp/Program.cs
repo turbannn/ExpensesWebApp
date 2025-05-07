@@ -10,6 +10,7 @@ using ExpenseWebAppDAL.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using ExpenseWebAppDAL.EmailHandlers;
 using ExpenseWebAppDAL.PasswordHashers;
 
 namespace ExpenseWebApp
@@ -39,6 +40,7 @@ namespace ExpenseWebApp
             });
 
             builder.Services.AddScoped<IPasswordHasher, Pbkdf2PasswordHasher>();
+            builder.Services.AddScoped<IEmailHandler, MailkitEmailHandler>();
 
             builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();

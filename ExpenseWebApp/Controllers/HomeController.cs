@@ -33,6 +33,11 @@ namespace ExpenseWebApp.Controllers
             return View("RegistrationView");
         }
 
+        [HttpGet("/Home/ForgotPassword")]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();
