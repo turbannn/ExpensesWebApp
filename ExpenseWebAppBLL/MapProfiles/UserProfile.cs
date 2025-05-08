@@ -13,6 +13,9 @@ namespace ExpenseWebAppBLL.MapProfiles
             CreateMap<UserReadDTO, User>();
             CreateMap<UserCreateDTO, User>();
 
+            CreateMap<UserUpdateDTO, User>();
+            CreateMap<User, UserUpdateDTO>();
+
             CreateMap<UserCreateDTO, UserReadDTO>();
         }
     }

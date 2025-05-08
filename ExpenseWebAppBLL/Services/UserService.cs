@@ -5,6 +5,7 @@ using ExpenseWebAppBLL.Interfaces;
 using FluentValidation;
 using AutoMapper;
 using System;
+using System.Security.Cryptography;
 
 namespace ExpenseWebAppBLL.Services
 {
@@ -73,19 +74,21 @@ namespace ExpenseWebAppBLL.Services
             user.Role = userCreateDto.Role;
 
             await _userRepository.AddAsync(user);
+            await _userRepository.SaveChangesAsync();
 
             return true;
         }
 
-        public async Task<bool> UpdateUserAsync(UserReadDTO userReadDto)
+        public async Task<bool> UpdateUserAsync(UserUpdateDTO userUpdateDto)
         {
-            var validationResult = await _validator.ValidateAsync(userReadDto);
+            var validationResult = await _validator.ValidateAsync(userUpdateDto);
             if (!validationResult.IsValid) return false;
 
-            var user = _mapper.Map<User>(userReadDto);
+            var user = _mapper.Map<User>(userUpdateDto);
             try
             {
                 await _userRepository.UpdateAsync(user);
+                await _userRepository.SaveChangesAsync();
             }
             catch (NullReferenceException exception)
             {
@@ -107,20 +110,48 @@ namespace ExpenseWebAppBLL.Services
 
         public async Task<bool> ResetUserPasswordAsync(string email)
         {
-            var str = "Another \n new \n password";
+            await _userRepository.BeginTransactionAsync();
 
             try
             {
-                await _emailHandler.SendEmail(email, "Expenses Tracker password reset", str);
+                var user = await _userRepository.GetByEmailAsync(email);
+                if (user is null) return false;
+
+                var newPassword = GenerateRandomString(15);
+                user.Password = _passwordHasher.HashPassword(newPassword);
+
+                string body = $"Your reset password for: {user.Username}\n{newPassword}";
+
+                await _userRepository.UpdateAsync(user);
+                await _userRepository.SaveChangesAsync();
+
+                await _emailHandler.SendEmail(email, "Expense Tracker password reset", body);
+                await _userRepository.CommitTransactionAsync();
+
+                return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Console.WriteLine("ERROR: email not sent");
-                Console.WriteLine(ex.ToString());
+                await _userRepository.RollbackTransactionAsync();
+                Console.WriteLine("ERROR:" + ex);
                 return false;
             }
+        }
 
-            return true;
+        private string GenerateRandomString(int length)
+        {
+            if (length < 0) throw new IndexOutOfRangeException();
+
+            const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var bytes = RandomNumberGenerator.GetBytes(length);
+            var result = new char[length];
+
+            for (int i = 0; i < length; i++)
+            {
+                result[i] = chars[bytes[i] % chars.Length];
+            }
+
+            return new string(result);
         }
     }
 }
