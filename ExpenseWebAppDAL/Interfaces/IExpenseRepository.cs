@@ -7,12 +7,12 @@ using ExpenseWebAppDAL.Entities;
 
 namespace ExpenseWebAppDAL.Interfaces;
 
-public interface IExpenseRepository : IRepository<Expense>
+public interface IExpenseRepository : IRepository<Expense>, ITransactionalRepository
 {
-    Task UpdateWithCategoryAsync(Expense entity, int categoryId);
+    Task UpdateAndAddCategoryAsync(Expense entity, int categoryId);
     Task UpdateAndDeleteCategoryAsync(Expense entity, string categoryName);
     Task AddWithCategoryAsync(Expense entity, int categoryId);
-    Task<IEnumerable<Expense>> GetAllDeletedByUserIdAsync(int id);
+    Task<IEnumerable<Expense>> GetAllDeletedByUserIdAsync(int userId);
     Task HardDeleteAsync(int id);
     Task RestoreAsync(int id);
 }

@@ -1,18 +1,11 @@
-﻿using ExpenseWebAppDAL.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace ExpenseWebAppDAL.Interfaces;
 
-public interface IRepository<ObjectType>
+public interface IRepository<TObjectType>
 {
-    Task<IEnumerable<ObjectType>> GetAllAsync();
-    Task<ObjectType?> GetByIdAsync(int id);
-    Task AddAsync(ObjectType entityToAdd);
-    Task UpdateAsync(ObjectType entityToUpdate);
+    Task<IEnumerable<TObjectType>> GetAllAsync();
+    Task<TObjectType?> GetByIdAsync(int id);
+    Task AddAsync(TObjectType entityToAdd);
+    Task UpdateAsync(TObjectType entityToUpdate);
     Task DeleteAsync(int id);
 }

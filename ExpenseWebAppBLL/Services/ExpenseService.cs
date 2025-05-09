@@ -60,11 +60,12 @@ namespace ExpenseWebAppBLL.Services
             if(expenseDTO.CategoryId != -1)
             {
                 await _expenseRepository.AddWithCategoryAsync(expense, expenseDTO.CategoryId);
+                await _expenseRepository.SaveChangesAsync();
                 return true;
             }
 
             await _expenseRepository.AddAsync(expense);
-
+            await _expenseRepository.SaveChangesAsync();
             return true;
         }
 
@@ -78,17 +79,20 @@ namespace ExpenseWebAppBLL.Services
 
             if (expenseDTO.CategoryId != -1)
             {
-                await _expenseRepository.UpdateWithCategoryAsync(expense, expenseDTO.CategoryId);
+                await _expenseRepository.UpdateAndAddCategoryAsync(expense, expenseDTO.CategoryId);
+                await _expenseRepository.SaveChangesAsync();
                 return true;
             }
 
             if (expenseDTO.CategoryName != "-1")
             {
                 await _expenseRepository.UpdateAndDeleteCategoryAsync(expense, expenseDTO.CategoryName);
+                await _expenseRepository.SaveChangesAsync();
                 return true;
             }
 
             await _expenseRepository.UpdateAsync(expense);
+            await _expenseRepository.SaveChangesAsync();
             return true;
         }
 
@@ -97,6 +101,7 @@ namespace ExpenseWebAppBLL.Services
             if (id < 0) return false;
 
             await _expenseRepository.DeleteAsync(id);
+            await _expenseRepository.SaveChangesAsync();
             return true;
         }
         public async Task<bool> HardDeleteExpenseAsync(int id)
