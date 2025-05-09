@@ -2,6 +2,7 @@
 using ExpenseWebAppDAL.Entities;
 using ExpenseWebAppDAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using MimeKit.Cryptography;
 
 namespace ExpenseWebAppDAL.Repositories
 {
@@ -21,6 +22,17 @@ namespace ExpenseWebAppDAL.Repositories
                 .Include(e => e.User)
                 .Include(e => e.CategoriesList)
                 .ToListAsync();
+        }
+        public async Task<IEnumerable<Expense>> GetAllDeletedByUserIdAsync(int id)
+        {
+            var a = await _context.Expenses
+                .AsNoTracking()
+                .IgnoreQueryFilters()
+                .Where(e => e.UserId == id && e.IsDeleted)
+                .Include(e => e.CategoriesList)
+                .ToListAsync();
+
+            return a;
         }
 
         public async Task<Expense?> GetByIdAsync(int id)
@@ -108,13 +120,26 @@ namespace ExpenseWebAppDAL.Repositories
 
             await _context.SaveChangesAsync();
         }
-
         public async Task DeleteAsync(int id)
         {
-            var delete = await _context.Expenses.SingleAsync(e => e.Id == id);
+            var delete = await _context.Expenses.FirstAsync(e => e.Id == id);
             _context.Remove(delete);
 
             await _context.SaveChangesAsync();
+        }
+        public async Task HardDeleteAsync(int id)
+        {
+            await _context.Expenses.IgnoreQueryFilters().Where(e => e.Id == id).ExecuteDeleteAsync();
+        }
+
+        public async Task RestoreAsync(int id)
+        {
+            await _context.Expenses
+                .IgnoreQueryFilters()
+                .Where(e => e.Id == id)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(e => e.IsDeleted, false)
+                    .SetProperty(e => e.DeletedAt, DateTimeOffset.MinValue));
         }
     }
 }

@@ -105,6 +105,7 @@ namespace ExpenseWebAppBLL.Services
             if (id < 0) return false;
 
             await _userRepository.DeleteAsync(id);
+            await _userRepository.SaveChangesAsync();
             return true;
         }
 

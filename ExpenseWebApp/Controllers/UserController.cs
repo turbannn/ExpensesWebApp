@@ -10,11 +10,13 @@ namespace ExpenseWebApp.Controllers
     public class UserController : Controller
     {
         private readonly UserService _userService;
+        private readonly ExpenseService _expenseService;
         private readonly TokenProvider _tokenProvider;
 
-        public UserController(UserService userService, TokenProvider tokenProvider)
+        public UserController(UserService userService, ExpenseService expenseService, TokenProvider tokenProvider)
         {
             _userService = userService;
+            _expenseService = expenseService;
             _tokenProvider = tokenProvider;
         }
 
@@ -76,6 +78,26 @@ namespace ExpenseWebApp.Controllers
             ViewBag.Expenses = totalExpenses;
 
             return View(user);
+        }
+        
+        [Authorize(Roles = "User,Admin")]
+        [HttpGet("/User/DeletedExpenses")]
+        public async Task<IActionResult> DeletedExpenses()
+        {
+            var idStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "no";
+
+            if (!int.TryParse(idStr, out int id))
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "Id parse error"
+                });
+            }
+
+            var expenses = await _expenseService.GetAllDeletedExpensesByUserIdAsync(id);
+
+            return View(expenses);
         }
 
         [HttpPost("/User/Logout")]

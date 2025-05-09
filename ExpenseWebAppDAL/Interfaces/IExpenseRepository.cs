@@ -12,4 +12,7 @@ public interface IExpenseRepository : IRepository<Expense>
     Task UpdateWithCategoryAsync(Expense entity, int categoryId);
     Task UpdateAndDeleteCategoryAsync(Expense entity, string categoryName);
     Task AddWithCategoryAsync(Expense entity, int categoryId);
+    Task<IEnumerable<Expense>> GetAllDeletedByUserIdAsync(int id);
+    Task HardDeleteAsync(int id);
+    Task RestoreAsync(int id);
 }

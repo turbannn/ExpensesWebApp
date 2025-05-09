@@ -101,6 +101,17 @@ namespace ExpenseWebApp.Controllers
         }
 
         [Authorize(Roles = "User,Admin")]
+        [HttpGet("/Expense/RestoreExpense/{id}")]
+        public async Task<IActionResult> RestoreExpense(int id)
+        {
+            var res = await _expenseService.RestoreExpenseAsync(id);
+
+            if (!res) return NotFound();
+
+            return RedirectToAction("DeletedExpenses", "User");
+        }
+
+        [Authorize(Roles = "User,Admin")]
         [HttpGet("/Expense/GetExpense/{id}")]
         public async Task<IActionResult> GetExpense(int id)
         {
@@ -122,6 +133,18 @@ namespace ExpenseWebApp.Controllers
                 return BadRequest("Invalid data");
 
             return Json(new { success = true, redirectUrl = Url.Action("UserProfileView", "User") });
+        }
+
+        [Authorize(Roles = "User,Admin")]
+        [HttpDelete("Expense/HardDeleteExpense/{id}")]
+        public async Task<IActionResult> HardDeleteExpense(int id)
+        {
+            var deleteTaskResult = await _expenseService.HardDeleteExpenseAsync(id);
+
+            if (!deleteTaskResult)
+                return BadRequest("Invalid data");
+
+            return Json(new { success = true, redirectUrl = Url.Action("DeletedExpenses", "User") });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

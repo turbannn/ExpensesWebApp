@@ -163,9 +163,32 @@ async function deleteExpense(id) {
     }
 }
 
+async function hardDeleteExpense(id) {
+    console.log("Function hardDeleteExpense executed");
+
+    try {
+        const response = await fetch(`/Expense/HardDeleteExpense/${id}`, { method: "DELETE" });
+        const result = await response.json();
+
+        console.log("Deleting expense with id:", id);
+
+        if (result.success) {
+            window.location.href = result.redirectUrl;
+        } else {
+            alert("Delete error: " + (result.message || "Unknown error"));
+        }
+    } catch (error) {
+        console.error("Request sending error:", error);
+        alert("Data update error");
+    }
+}
+
 function RedirectToExpenseCreation() {
     window.location.href = "/Expense/CreateExpense";
 }
 function RedirectToExpenseEditing(expenseId) {
     window.location.href = `/Expense/EditExpense/${expenseId}`;
+}
+function RedirectToRestoringExpense(expenseId) {
+    window.location.href = `/Expense/RestoreExpense/${expenseId}`;
 }

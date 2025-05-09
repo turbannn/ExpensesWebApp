@@ -81,7 +81,8 @@ namespace ExpenseWebAppDAL.Repositories
 
         public async Task DeleteAsync(int id)
         {
-            await _context.Users.Where(u => u.Id == id).ExecuteDeleteAsync();
+            var user = await _context.Users.FirstAsync(u => u.Id == id);
+            _context.Remove(user);
         }
 
         public async Task BeginTransactionAsync()

@@ -30,6 +30,14 @@ namespace ExpenseWebAppBLL.Services
 
             return expenseDtos;
         }
+        public async Task<IEnumerable<ExpenseReadDTO>> GetAllDeletedExpensesByUserIdAsync(int id)
+        {
+            var expenses = await _expenseRepository.GetAllDeletedByUserIdAsync(id);
+
+            var expenseDtos = _mapper.Map<List<ExpenseReadDTO>>(expenses);
+
+            return expenseDtos;
+        }
         public async Task<ExpenseReadDTO?> GetExpenseByIdAsync(int id)
         {
             if (id < 0) return null;
@@ -86,10 +94,24 @@ namespace ExpenseWebAppBLL.Services
 
         public async Task<bool> DeleteExpenseAsync(int id)
         {
-
             if (id < 0) return false;
 
             await _expenseRepository.DeleteAsync(id);
+            return true;
+        }
+        public async Task<bool> HardDeleteExpenseAsync(int id)
+        {
+            if (id < 0) return false;
+
+            await _expenseRepository.HardDeleteAsync(id);
+            return true;
+        }
+
+        public async Task<bool> RestoreExpenseAsync(int id)
+        {
+            if (id < 0) return false;
+
+            await _expenseRepository.RestoreAsync(id);
             return true;
         }
     }

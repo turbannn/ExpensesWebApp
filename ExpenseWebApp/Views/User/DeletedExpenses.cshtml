@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "Expenses";
+}
+
+@model IEnumerable<ExpenseWebAppBLL.DTOs.ExpenseDTOs.ExpenseReadDTO>
+
+<script src="~/js/ExpensesFrontend.js"></script>
+<script src="~/js/HomeFrontend.js"></script>
+
+<div class="text-center">
+    <h1 class="display-4">Deleted Expenses</h1>
+    <br />
+    <a class="btn btn-secondary" onclick="LoginRedirection()">Profile</a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Value</th>
+                <th>Description</th>
+                <th>Creation Date</th>
+                <th>Categories</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (var e in Model)
+                {
+                    <tr>
+                        <td>@e.Id</td>
+                        <td>@e.Value</td>
+                        <td>@e.Description</td>
+                        <td>@e.CreationDate</td>
+                        <td>@e.Categories</td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-outline-success" onclick="RedirectToRestoringExpense(@e.Id)">Restore</button>
+                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="hardDeleteExpense(@e.Id)">Delete</button>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
