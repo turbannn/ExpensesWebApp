@@ -10,6 +10,7 @@ using ExpenseWebAppDAL.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using ExpenseWebApp.Extensions;
 using ExpenseWebAppDAL.EmailHandlers;
 using ExpenseWebAppDAL.PasswordHashers;
 
@@ -86,13 +87,9 @@ namespace ExpenseWebApp
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+            app.UseExceptionHandling();
+
+            app.UseRequestLogging();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
