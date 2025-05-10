@@ -38,6 +38,7 @@ namespace ExpenseWebAppBLL.Services
 
             return expenseDtos;
         }
+
         public async Task<ExpenseReadDTO?> GetExpenseByIdAsync(int id)
         {
             if (id < 0) return null;

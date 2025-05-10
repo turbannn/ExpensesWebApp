@@ -15,7 +15,7 @@ namespace ExpenseWebApp.Controllers
         }
 
         [HttpGet("/Home/TryLogin")]
-        public IActionResult Login()
+        public IActionResult Login(int page = 1, int pageSize = 10)
         {
             var AT = Request.Cookies["jwt"];
 
@@ -23,8 +23,8 @@ namespace ExpenseWebApp.Controllers
             {
                 return View();
             }
-            
-            return RedirectToAction("UserProfileView", "User");
+
+            return RedirectToAction("UserProfileView", "User", new { page, pageSize });
         }
 
         [HttpGet("/Home/Register")]

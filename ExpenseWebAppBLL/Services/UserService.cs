@@ -38,6 +38,7 @@ namespace ExpenseWebAppBLL.Services
 
             return userDtos;
         }
+
         public async Task<UserReadDTO?> GetUserByIdAsync(int id)
         {
             if (id < 0) return null;
@@ -49,7 +50,18 @@ namespace ExpenseWebAppBLL.Services
 
             return userReadDto;
         }
+        
+        public async Task<UserReadDTO?> GetUserByIdWithPagedExpensesAsync(int id, int page, int pageSize)
+        {
+            if (id < 0) return null;
 
+            var user = await _userRepository.GetByIdWithPagedExpensesAsync(id, page, pageSize);
+            if (user == null) return null;
+
+            var userReadDto = _mapper.Map<UserReadDTO>(user);
+
+            return userReadDto;
+        }
         public async Task<UserReadDTO?> GetUserByNameAndPasswordAsync(string username, string password)
         {
             var user = await _userRepository.GetByUsernameAsync(username);

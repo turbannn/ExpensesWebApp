@@ -7,5 +7,6 @@ namespace ExpenseWebAppDAL.Interfaces
         Task<User?> GetByUsernameAndPasswordAsync(string username, string password);
         Task<User?> GetByUsernameAsync(string username);
         Task<User?> GetByEmailAsync(string email);
+        Task<User?> GetByIdWithPagedExpensesAsync(int userId, int pageNumber, int pageSize);
     }
 }

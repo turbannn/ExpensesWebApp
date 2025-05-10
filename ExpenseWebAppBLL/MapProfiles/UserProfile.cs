@@ -8,13 +8,14 @@ namespace ExpenseWebAppBLL.MapProfiles
     {
         public UserProfile()
         {
-            CreateMap<User, UserReadDTO>();
+            CreateMap<User, UserReadDTO>()
+                .ForMember(dest => dest.TotalExpensesCount, opt =>
+                {
+                    opt.MapFrom(src => src.EntityMetadata.UserExpensesTotalCount);
+                });
 
-            CreateMap<UserReadDTO, User>();
             CreateMap<UserCreateDTO, User>();
-
             CreateMap<UserUpdateDTO, User>();
-            CreateMap<User, UserUpdateDTO>();
 
             CreateMap<UserCreateDTO, UserReadDTO>();
         }

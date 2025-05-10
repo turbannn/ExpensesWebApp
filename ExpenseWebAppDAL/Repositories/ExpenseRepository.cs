@@ -1,6 +1,7 @@
 ﻿using ExpenseWebAppDAL.Data;
 using ExpenseWebAppDAL.Entities;
 using ExpenseWebAppDAL.Interfaces;
+using ExpenseWebAppDAL.Migrations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using MimeKit.Cryptography;
@@ -124,7 +125,7 @@ namespace ExpenseWebAppDAL.Repositories
             _context.Remove(delete);
         }
 
-        //No need to call SaveChangesAsync()
+        //NO NEED to call SaveChangesAsync()
         public async Task HardDeleteAsync(int id)
         {
             await _context.Expenses.IgnoreQueryFilters().Where(e => e.Id == id).ExecuteDeleteAsync();

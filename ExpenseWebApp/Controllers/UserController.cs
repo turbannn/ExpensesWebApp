@@ -1,9 +1,11 @@
 ﻿using ExpenseWebAppBLL.DTOs.UserDTOs;
 using ExpenseWebAppBLL.Services;
 using ExpenseWebAppDAL.Authentication;
+using ExpenseWebAppDAL.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using ExpenseWebAppBLL.DTOs.ExpenseDTOs;
 
 namespace ExpenseWebApp.Controllers
 {
@@ -49,7 +51,7 @@ namespace ExpenseWebApp.Controllers
 
         [Authorize(Roles = "User,Admin")]
         [HttpGet("/User/UserProfile")]
-        public async Task<IActionResult> UserProfileView()
+        public async Task<IActionResult> UserProfileView(int page = 1, int pageSize = 10)
         {
             var idStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "no";
 
@@ -62,7 +64,7 @@ namespace ExpenseWebApp.Controllers
                 });
             }
 
-            var user = await _userService.GetUserByIdAsync(id);
+            var user = await _userService.GetUserByIdWithPagedExpensesAsync(id, page, pageSize);
 
             if (user is null)
             {
@@ -75,6 +77,9 @@ namespace ExpenseWebApp.Controllers
 
             var totalExpenses = user.Expenses.Sum(x => x.Value);
 
+            ViewBag.CurrentPage = page;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalPages = (int)Math.Ceiling((double)user.TotalExpensesCount / pageSize);
             ViewBag.Expenses = totalExpenses;
 
             return View(user);
